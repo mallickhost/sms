@@ -99,12 +99,14 @@ class StudentsController extends AdminAppController
     {
 		// academic session dropdown
 		$obj_student = new Student();
-		$arr_student = $obj_student->getStudentDetails($studentId);
+		$student_data = $obj_student->getStudentDetails($studentId);
 
-		if(empty($arr_student)){
+		if(empty($student_data)){
 			return redirect()->route('admin.students.list')->with('warning', 'something went wrong.');
 		}
-$this->p($arr_student);
+
+		$arr_student = $student_data->toArray();
+
 
 		$obj_academic = new Academic();
 		$arr_session = $obj_academic->list_session();

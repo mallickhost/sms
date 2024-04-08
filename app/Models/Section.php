@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class AcademicSession extends Model
+class Section extends Model
 {
-    protected $table = 'academic_sessions';
+    protected $table = 'sections';
 }

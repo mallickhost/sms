@@ -22,14 +22,15 @@
                 <div class="card card-primary card-outline">
                   <div class="card-body box-profile">
                     <div class="text-center">
+						
                       <img class="profile-user-img img-fluid img-circle"
                           src="{{asset('assets/img/avatar-h.png')}}"
                           alt="User profile picture">
                     </div>
 
-                    <h3 class="profile-username text-center">Koushani Sen Chowdhury</h3>
+                    <h3 class="profile-username text-center">{{$arr_student['student_name']}}</h3>
 
-                    <p class="text-muted text-center">S123445</p>
+                    <p class="text-muted text-center">{{$arr_student['student_number']}}</p>
 
                     <!-- <ul class="list-group list-group-unbordered mb-0">
                       <li class="list-group-item">
@@ -61,17 +62,17 @@
                   <div class="card-body">
                     <strong><i class="fas fa-user-friends"></i> Parent's Name</strong>
                     <p class="text-muted">
-                    M: Rupali Dhar <br> F: Sankar Dhar
+                    M: {{$arr_student['mother_name']}} <br> F: {{$arr_student['father_name']}}
                     </p>
                     <hr>
                     <strong><i class="fas fa-phone-alt"></i> Contact Number</strong>
                     <p class="text-muted">
-                    7654567876 <br> 9986655644
+                    {{$arr_student['mobile_no_1']}} <br> {{$arr_student['mobile_no_2']}}
                     </p>
                     <hr>
 
                     <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
-                    <p class="text-muted">Sukanta Pally, Guma</p>
+                    <p class="text-muted"> {{$arr_student['address']}}</p>
 
                     <button class="btn btn-danger btn-block"><i class="fas fa-user-times"></i> Parmanent Delete</button>
                   
@@ -135,7 +136,7 @@
                           <div class="col-sm-3">
 						 	<div class="form-group">
                               <br>
-							  <input type="text"  name='student_id' value='{{$arr_student->id]}}' >
+							  <input type="text"  name='student_id' value='{{$arr_student["id"]}}' >
                               <button type="submit" class="btn btn-primary float-right">Save changes</button>
                             </div>
                           </div>
@@ -203,6 +204,7 @@
                         <thead>
                           <tr>
                             <th>Academic Session</th>
+							<th>Year</th>
                             <th>Class</th>
                             <th>Section</th>
                             <th>Roll No</th>
@@ -210,12 +212,13 @@
                           </tr>
                         </thead>
                         <tbody>
-						@foreach ($arr_student->academicDetails as $academicDetails)
+						@foreach ($arr_student['academic_details'] as $academic_details)
                           <tr>                    
-                            <td>{{$academicDetails->}}</td>
-                            <td>III</td>
-                            <td>B</td>
-                            <td>23</td>
+                            <td>{{$academic_details['academic_session']['session_name']}}</td>
+							<td>{{$academic_details['academic_session']['session_year']}}</td>
+							<td>{{$academic_details['academic_class']['class_roman_name']}}</td>
+							<td>{{$academic_details['section']['name']}}</td>
+                            <td>{{$academic_details['roll_number']}}</td>
 							<td><span class="badge bg-primary">Studing</span></td>
                           </tr>
 						  @endforeach

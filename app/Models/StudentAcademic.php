@@ -17,6 +17,16 @@ class StudentAcademic extends Model
     }
 
 
+    public function academicClass()
+    {
+        return $this->belongsTo(AcademicClass::class,'academic_class_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
  
 
     public function getStudentCurrentAcademicDetails($studentId){
