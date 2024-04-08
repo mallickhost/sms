@@ -86,7 +86,7 @@
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
-				<label>Gender</label>
+				<label>Class</label>
 				<select class="form-control"   name='gender' >
 					<option>Male</option>
 					<option>Female</option>
@@ -94,7 +94,7 @@
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
-				<label>Mobile Number</label>
+				<label>Section</label>
 				<input type="text" class="form-control" value="{{ old('mobile_no_1', $studentData['mobile_no_1'] ?? '') }}"  name='mobile_no_1'  >
 				</div>
 			</div>
