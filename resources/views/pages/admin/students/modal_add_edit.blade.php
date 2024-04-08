@@ -100,7 +100,7 @@
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
-				<label>Alt Mobile Number</label>
+				<label>Roll No</label>
 				<input type="text" class="form-control" value="{{ old('mobile_no_2', $studentData['mobile_no_2'] ?? '') }}" name='mobile_no_2' >
 				</div>
 			</div>
