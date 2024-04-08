@@ -22,7 +22,8 @@ return new class extends Migration
             $table->foreign('academic_class_id')->references('id')->on('academic_classes');
             $table->integer('section_id')->unsigned()->index('student_academic_details_section_id_index')->nullable(false);
             $table->foreign('section_id')->references('id')->on('sections');
-            $table->string('roll_number','10');            
+            $table->string('roll_number','10');  
+            $table->integer('academic_status')->unsigned()->default(1)->comment('1= current, 2= passed, 3=failed');;           
             $table->timestamps();
         });
     }

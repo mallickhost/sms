@@ -26,7 +26,7 @@ class Controller extends BaseController
 
     //todo delete after development done
 
-    public function printx($val){
+    public function p($val){
         echo "<pre>";print_r($val);
         echo "</pre>";
         die('xxxbasectrlxxx');

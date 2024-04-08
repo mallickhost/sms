@@ -31,7 +31,7 @@
 
                     <p class="text-muted text-center">S123445</p>
 
-                    <ul class="list-group list-group-unbordered mb-0">
+                    <!-- <ul class="list-group list-group-unbordered mb-0">
                       <li class="list-group-item">
                         <b>Class</b> <a class="float-right">IV</a>
                       </li>
@@ -44,7 +44,7 @@
                       <li class="list-group-item">
                         <b>Gender</b> <a class="float-right">Female</a>
                       </li>
-                    </ul>
+                    </ul> -->
 
                   
                   </div>
@@ -85,113 +85,115 @@
                 
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title text-danger">Academic Details</h3>
+                      <h3 class="card-title text-danger">Current Academic Details</h3>
                       <div class="card-tools">
                           <!-- <a href="{{ route('admin.students.list') }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a> -->
                       </div>
                     </div>
 
                     <div class="card-body">
-                      <form>
+                      <form action="{{ route('admin.students.updateAcademicDetails') }}" method="POST" >
+					  @csrf
                         <div class="row">
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label>Academic Session</label>
-                              <select class="form-control">
-                                <option>--- Select ---</option>
-                                <option>2023-2024</option>
-                                <option>2022-2023</option>
+                              <select class="form-control" name='academic_session_id' >
+                                @foreach($arr_session as $session)							
+                                  <option value="{{$session->id}}" >{{$session->session_name}}</option>
+                                @endforeach
                               </select>
                             </div>
                           </div>
                           <div class="col-sm-2">
                             <div class="form-group">
-                              <label>Class</label>
-                              <select class="form-control">
-                                <option>Select</option>
-                                <option>KG</option>
-                                <option>I</option>
-                                <option>II</option>
-                                <option>III</option>
-                                <option>IV</option>
-                              </select>
+                            	<label>Class</label>
+                              	<select class="form-control" name='academic_class_id' >
+									@foreach($arr_class as $class)							
+										<option value="{{$class->id}}" >{{$class->class_roman_name}}</option>
+									@endforeach
+								</select>
                             </div>
                           </div>
                           <div class="col-sm-2">
                             <div class="form-group">
                               <label>Section</label>
-                              <select class="form-control">
-                                <option>Select</option>
-                                <option>A</option>
-                                <option>B</option>
-                              </select>
+                              <select class="form-control" name='section_id' >
+									@foreach($arr_section as $section)							
+										<option value="{{$section->id}}" >{{$section->name}}</option>
+									@endforeach
+								</select>
                             </div>
                           </div>
                           <div class="col-sm-2">
                             <div class="form-group">
                               <label>Roll Number</label>
-                              <input type="text" class="form-control" placeholder="Roll No">
+                              <input type="text" class="form-control" name='roll_number' placeholder="Roll No">
                             </div>
                           </div>
+
                           <div class="col-sm-3">
-                            <div class="form-group">
-                              <label>Student ID</label>
-                              <input type="text" class="form-control" placeholder="Student ID">
+						 	<div class="form-group">
+                              <br>
+							  <input type="text"  name='student_id' value='{{$arr_student->id]}}' >
+                              <button type="submit" class="btn btn-primary float-right">Save changes</button>
                             </div>
                           </div>
+
                         </div>
-                        <div class="row">
-                          <div class="col-sm-3 offset-sm-9">
-                             <button type="button" class="btn btn-primary float-right">Save changes</button>
-                          </div>
-                        </div>
+                        
                       </form>
                     </div>
                   </div>
 
 
-                 <div class="card">
-                    <div class="card-header">
-                      <h3 class="card-title text-primary">Academic Results</h3>
-                    </div>
+					<!-- <div class="card">
+						<div class="card-header">
+						<h3 class="card-title text-primary">Academic Results</h3>
+						</div>
 
-                    <div class="card-body ">
-                        <table class="table table-sm">
-                          <thead>
-                            <tr>
-                              <th>Exam Name</th>
-                              <th>Result on</th>
-                              <th>Result uploaded</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>                    
-                              <td>Class Test</td>
-                              <td>16-Jan-2024</td>
-                              <td>Yes</td>
-                              <td> 
-                                <button class="btn btn-sm btn-primary" title="Download Result"><i class="fas fa-download"></i></button>
-                              </td>
-                            </tr>
-                            <tr>                    
-                              <td>Half Yearly</td>
-                              <td>27-Jun-2024</td>
-                              <td>Yes</td>
-                              <td> 
-                                <button class="btn btn-sm btn-primary" title="Download Result"><i class="fas fa-download"></i></button>
-                              </td>
-                            </tr>
-                            
+						<div class="card-body ">
+							<table class="table table-sm">
+							<thead>
+								<tr>
+								<th>Exam Name</th>
+								<th>Result on</th>
+								<th>Result uploaded</th>
+								<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>                    
+								<td>Class Test</td>
+								<td>16-Jan-2024</td>
+								<td>Yes</td>
+								<td> 
+									<button class="btn btn-sm btn-primary" title="Download Result"><i class="fas fa-download"></i></button>
+								</td>
+								</tr>
+								<tr>                    
+								<td>Half Yearly</td>
+								<td>27-Jun-2024</td>
+								<td>Yes</td>
+								<td> 
+									<button class="btn btn-sm btn-primary" title="Download Result"><i class="fas fa-download"></i></button>
+								</td>
+								</tr>
+								
 
-                          </tbody>
-                        </table>     
-                    
-                    </div>
-                     
-                  </div>
+							</tbody>
+							</table>     
+						
+						</div>
+						
+					</div> -->
 
-                <div class="card">
+                
+				
+				
+				
+				
+				  <div class="card">
                   <div class="card-header">
                     <h3 class="card-title text-info">Academic History</h3>
                   </div>
@@ -204,27 +206,20 @@
                             <th>Class</th>
                             <th>Section</th>
                             <th>Roll No</th>
+							<th>Status</th>
                           </tr>
                         </thead>
                         <tbody>
+						@foreach ($arr_student->academicDetails as $academicDetails)
                           <tr>                    
-                            <td>2022-2023</td>
+                            <td>{{$academicDetails->}}</td>
                             <td>III</td>
                             <td>B</td>
                             <td>23</td>
+							<td><span class="badge bg-primary">Studing</span></td>
                           </tr>
-                          <tr>                    
-                            <td>2021-2022</td>
-                            <td>II</td>
-                            <td>A</td>
-                            <td>17</td>
-                          </tr>
-                          <tr>                    
-                            <td>2020-2021</td>
-                            <td>I</td>
-                            <td>B</td>
-                            <td>14</td>
-                          </tr>
+						  @endforeach
+                       
 
                         </tbody>
                       </table>     
@@ -242,7 +237,7 @@
     </section>
 </div>
 
-@include('pages.admin.students.modal_add_edit')
+
     <!-- /.content-wrapper -->
 @endsection
 

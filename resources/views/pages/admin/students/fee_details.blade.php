@@ -309,7 +309,7 @@
     </section>
 </div>
 
-@include('pages.admin.students.modal_add_edit')
+
     <!-- /.content-wrapper -->
 @endsection
 

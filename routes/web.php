@@ -58,6 +58,7 @@ Route::prefix('admin')->group(function () {
         Route::put('/update-student', 'updateStudent')->name('admin.students.updateStudent');
         Route::get('/fees/{studentId}', 'feeDetails')->name('admin.students.fees');
         Route::get('/details/{studentId}', 'details')->name('admin.students.details');
+        Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');
         
     });
 

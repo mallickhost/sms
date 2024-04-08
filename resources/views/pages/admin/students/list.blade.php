@@ -107,9 +107,7 @@
                           <th>Student Number</th>
                           <th>Name</th>
                           <th>Father Name</th>
-                          <th>Class</th>
-                          <th>Section</th>
-                          <th>Roll No</th>
+                          <th>aadhaar_number</th>
                           <th>Contact No</th>
                           <th>Action</th>
                         </tr>
@@ -122,14 +120,12 @@
                           <td> {{ $student->student_number }}</td>
                           <td> {{ $student->student_name }}</td>
                           <td> {{ $student->father_name }}</td>
-                          <td> {{ $student->email }}</td>
-                          <td> {{ $student->email }}</td>
-                          <td> {{ $student->email }}</td>
+                          <td> {{ $student->aadhaar_number }}</td>
                           <td> {{ $student->mobile_no_1 }}</td>
                           <td>
-                            <a target="_blank"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a>
-                            <a target="_blank" class="btn btn-sm btn-info" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i></a>
-                            <a  data-toggle="modal" data-target="#myModal"  class="btn btn-sm btn-success" href="{{ route('admin.students.add_edit', ['studentId' => $student->id]) }}"><i class="fas fa-pencil-alt"></i></a>
+                            <a target="_blank" title="Fees details"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a>
+                            <a target="_blank" title="Academic details" class="btn btn-sm btn-info" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i></a>
+                            <a title="Edit Studetn" data-toggle="modal" data-target="#myModal"  class="btn btn-sm btn-success" href="{{ route('admin.students.add_edit', ['studentId' => $student->id]) }}"><i class="fas fa-pencil-alt"></i></a>
                           </td>
                         </tr>
                       @endforeach

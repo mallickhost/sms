@@ -29,4 +29,17 @@ class Student extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+	public function academicDetails()
+    {
+        return $this->hasMany(StudentAcademic::class);
+    }
+
+    public function getStudentDetails($studentId){
+        $details = Student::select()
+       ->with('academicDetails')
+        ->where('students.id', $studentId)
+        ->first();
+        return $details->toArray();
+    }
 }
