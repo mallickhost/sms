@@ -80,7 +80,7 @@
 		<div class="row">        
 			<div class="col-sm-3">
 				<div class="form-group">
-				<label>Date of Birth</label>
+				<label>Academic Session</label>
 				<input type="date" class="form-control" value="{{ old('dob', $studentData['dob'] ?? '') }}"  name='dob' >
 				</div>
 			</div>
