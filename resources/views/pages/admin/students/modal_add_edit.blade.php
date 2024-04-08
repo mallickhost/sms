@@ -77,6 +77,35 @@
 			</div>
 			
 		</div>
+		<div class="row">        
+			<div class="col-sm-3">
+				<div class="form-group">
+				<label>Date of Birth</label>
+				<input type="date" class="form-control" value="{{ old('dob', $studentData['dob'] ?? '') }}"  name='dob' >
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+				<label>Gender</label>
+				<select class="form-control"   name='gender' >
+					<option>Male</option>
+					<option>Female</option>
+				</select></div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+				<label>Mobile Number</label>
+				<input type="text" class="form-control" value="{{ old('mobile_no_1', $studentData['mobile_no_1'] ?? '') }}"  name='mobile_no_1'  >
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+				<label>Alt Mobile Number</label>
+				<input type="text" class="form-control" value="{{ old('mobile_no_2', $studentData['mobile_no_2'] ?? '') }}" name='mobile_no_2' >
+				</div>
+			</div>
+			
+		</div>
 		
 
 		<div class="row">                        
