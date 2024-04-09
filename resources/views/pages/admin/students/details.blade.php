@@ -94,7 +94,7 @@
 
                     <div class="card-body">
                       <form action="{{ route('admin.students.updateAcademicDetails') }}" method="POST" >
-					  @csrf
+					            @csrf
                         <div class="row">
                           <div class="col-sm-3">
                             <div class="form-group">
