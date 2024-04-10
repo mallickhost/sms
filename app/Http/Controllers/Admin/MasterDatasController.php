@@ -57,7 +57,7 @@ class MasterDatasController extends AdminAppController
                     $obj_academic_fees->academic_session_id = $request_data['academic_session_id'];
                     $obj_academic_fees->academic_class_id = $request_data['academic_class_id'];
                     $obj_academic_fees->fees_master_id = $fee_id;
-                    $obj_academic_fees->total_amount = $fee_amount;
+                    $obj_academic_fees->total_fees_amount = $fee_amount;
                     $obj_academic_fees->save();
                 }
             }

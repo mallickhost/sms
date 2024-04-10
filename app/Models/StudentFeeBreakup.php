@@ -16,6 +16,13 @@ class StudentFeeBreakup extends Model
     }
 
 
+    public function paymentTransactions()
+    {
+        return $this->hasMany(PaymentTransaction::class,'students_fees_breakups_id');
+    }
+
+
+
     /**
 	 * @desc check the academic_fees is already assigned or not
 	 *
@@ -56,7 +63,7 @@ class StudentFeeBreakup extends Model
 
      public function getStudentFeesBreakupDetails(int $studentId,int $academicSessionId):array{
         return StudentFeeBreakup::select()
-        ->with(['academicFees'=>['feesMaster']])
+        ->with(['academicFees'=>['feesMaster'],'paymentTransactions'])
         ->where('student_id',$studentId)
         ->where('academic_session_id',$academicSessionId)
         ->get()

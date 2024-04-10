@@ -62,7 +62,7 @@
 													@foreach($class_fees['academic_fee'] as $academic_fee)
 														<span class="badge bg-primary">
 															{{$academic_fee['fees_master']['fees_name']}}
-															(₹ {{$academic_fee['total_amount']}})
+															(₹ {{$academic_fee['total_fees_amount']}})
 														</span>
 												
 													@endforeach

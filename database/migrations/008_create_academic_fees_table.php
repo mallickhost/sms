@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('academic_session_id')->references('id')->on('academic_sessions')->onDelete('cascade');
             $table->integer('academic_class_id')->unsigned()->index('academic_fees_academic_class_id_index')->nullable(false);
             $table->foreign('academic_class_id')->references('id')->on('academic_classes')->onDelete('cascade');
-            $table->float('total_amount', 8, 2);
+            $table->float('total_fees_amount', 8, 2);
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });

@@ -10,6 +10,7 @@ use App\Models\Academic;
 use App\Models\AcademicFee;
 use App\Models\StudentAcademic;
 use App\Models\StudentFeeBreakup;
+use App\Models\PaymentTransaction;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 
@@ -180,7 +181,7 @@ class StudentsController extends AdminAppController
                 
                    if(empty($data_exist)){
 
-                        $amount = $academic_fees['total_amount']/$academic_fees['fees_master']['no_of_payments_in_a_year'];
+                        $amount = $academic_fees['total_fees_amount']/$academic_fees['fees_master']['no_of_payments_in_a_year'];
 
                         // $this->p($academic_fees);
                         for($i=0;$i<$academic_fees['fees_master']['no_of_payments_in_a_year'];$i++){
@@ -220,18 +221,78 @@ class StudentsController extends AdminAppController
 		$obj_student_academic  = new StudentAcademic();
 		$current_academic = $obj_student_academic->getStudentCurrentAcademicDetails($student_id);
 
+        if(empty($request_data['payment_for'])){
+            return redirect()->route('admin.students.fees',$student_id)->with('warning', 'No fees is checked for payment');
+        }
         $arr_ids = array_keys($request_data['payment_for']);
         $obj_student_fee_breakup  = new StudentFeeBreakup();
         $arr_fees = $obj_student_fee_breakup->getBreakupDetailsByIds($arr_ids);
         // $this->p($arr_fees);
         if(empty($arr_fees) || empty($current_academic)){
-            return redirect()->route('admin.students.list',$student_id)->with('warning', 'Something went wrong.');
+            return redirect()->route('admin.students.list')->with('warning', 'Something went wrong.');
         }
         
         return view('pages/admin/students/payment_details',compact('arr_fees','current_academic'));
        
-		
-	
+	}
+
+
+
+
+    public function makePayment(Request $request){
+
+
+		$request_data = $request->all();
+
+        if(empty($request_data['paid_amount'])){
+
+            return redirect()->route('admin.students.list')->with('warning', 'Something went wrong.');
+        }
+      
+        if($request_data['payment_mode'] == "ONLINE"){
+            $txn = "ON".time();
+        }else{
+            $txn = "CA".time();
+        }
+        $transaction_number = !empty($request_data['transaction_nubmer'])?$request_data['transaction_nubmer']:$txn;
+
+        foreach($request_data['paid_amount'] as $id=>$current_paid_amount){
+            
+            $obj_payment_transaction = new PaymentTransaction();
+            $obj_payment_transaction->students_fees_breakups_id = $id;
+            $obj_payment_transaction->payment_mode = $request_data['payment_mode'];
+            $obj_payment_transaction->payment_date = $request_data['payment_date'];
+            $obj_payment_transaction->transaction_number = $transaction_number;
+            $obj_payment_transaction->paid_amount = $current_paid_amount;
+            $obj_payment_transaction->transaction_note = $request_data['transaction_note'];
+            $obj_payment_transaction->is_paid = true;
+            $obj_payment_transaction->save();
+
+            //update students_fees_breakups table
+          
+            $obj_fee_breakup = StudentFeeBreakup::find($id);
+            // echo $obj_fee_breakup->paid_amount + $current_paid_amount;;
+            //  $this->p($obj_fee_breakup);
+
+            $remaining_amount = $obj_fee_breakup->total_amount - $obj_fee_breakup->paid_amount;
+    
+            if($remaining_amount == $current_paid_amount){
+                $payment_status = "FULL_PAID";
+            }else{
+                $payment_status = "PARTIALY";
+            }
+
+            $obj_fee_breakup->paid_amount = $obj_fee_breakup->paid_amount + $current_paid_amount;
+            $obj_fee_breakup->payment_status = $payment_status;
+            $obj_fee_breakup->save();
+
+// $this->p($obj_fee_breakup);
+
+
+        }
+        return redirect()->route('admin.students.fees',$request_data['student_id'])->with('success', 'Payment successfully.');
+
+       
 	}
 
 }

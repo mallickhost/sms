@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('month_name','30');
             $table->float('total_amount', 8, 2);
             $table->float('paid_amount', 8, 2);
+            $table->enum('payment_status',['NOT_PAID', 'PARTIALY','FULL_PAID'])->nullable(false)->default('NOT_PAID');
             $table->timestamps();
         });
     }

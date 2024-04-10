@@ -80,10 +80,10 @@
               </div>
               <!-- /.col -->
               <div class="col-md-9">
-                
+                @if(!empty($arr_fees_data))
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title text-danger">Tuition Fees</h3>
+                    <h3 class="card-title text-danger">Fees Breakups</h3>
                     <div class="card-tools">
                         <!-- <a href="{{ route('admin.students.list') }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a> -->
                     </div>
@@ -96,9 +96,10 @@
                               <th style="width: 10px">#</th>  
                               <th>Fee Name</th>
                               <th>Month</th>
-                              <th>Total Amount</th>
-                              <th>Paid Amount</th>
-                              <th>Status</th>
+                              <th class="text-right">Total</th>
+                              <th class="text-right">Paid</th>
+                              <th class="text-right">Remaining</th>
+                              <th class="text-center">Status</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -108,18 +109,37 @@
                             <tr>
                               <td>
                                 <div class="form-check">
+                                @if($fee_data['payment_status']=='PARTIALY' || $fee_data['payment_status']=='NOT_PAID' )
                                   <input type="checkbox" name="payment_for[{{$fee_data['id']}}]" class="form-check-input" >
+                               
+                                @endif
+                                 
                                 </div>
                               </td>   
                               <td>{{$fee_data['academic_fees']['fees_master']['fees_name']}}</td>
                               <td>{{$fee_data['month_name']}}</td>
-                              <td>Manual</td>
-                              <td>{{$fee_data['total_amount']}}</td>
-                              <td>Paid </td>
+                              <td class="text-right">₹{{number_format($fee_data['total_amount'],2)}}</td>
+                              <td class="text-right">₹{{number_format($fee_data['paid_amount'],2)}}</td>
+                              <td class="text-right">₹{{number_format($fee_data['total_amount'] - $fee_data['paid_amount'],2)}}</td>
+                              <td class="text-center">
+                              
+                                  @if($fee_data['payment_status'] == "FULL_PAID")
+                                  <span class="badge bg-success">Paid</span>
+                                  @elseif($fee_data['payment_status']=='PARTIALY')
+                                   <span class="badge bg-warning">Partialy</span>
+                                  @else
+                                  <span class="badge bg-danger">Not Paid</span>
+                                  @endif
+                               
+                                
+                              </td>
                               <td> 
-                                <button class="btn btn-sm btn-primary "><i class="fas fa-rupee-sign"></i></button>
-                                <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>                              
-                                <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
+                                @if($fee_data['payment_status'] == "FULL_PAID" || $fee_data['payment_status']=='PARTIALY'  )
+                                  <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button> 
+                                 
+                                  @endif
+                                                          
+                               
                               </td>
                               
                             </tr>
@@ -131,7 +151,8 @@
                             <tr>
                               <td colspan="7">
                                 <input type='hidden' name="student_id" value="{{$student_data['student']['id']}}" >
-                                <button type='submit' class="btn btn-success btn-sm">Paid Checked</button>
+                                <button type='submit' class="btn btn-success btn-sm"><i class="far fa-check-square"></i> Paid Checked</button>
+                                <!-- <button class="btn btn-sm btn-info"><i class="fas fa-download"></i> Download all paid receipt</button> -->
                               </td>
                             </tr>
                             
@@ -140,7 +161,9 @@
                     </div>
                   </form>
                 </div>
-
+                @else
+                <span class="badge bg-danger">No fee is assign to this student please assign fees.</span>
+                @endif
               </div>
               <!-- /.col -->
         </div>
