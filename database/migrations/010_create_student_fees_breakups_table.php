@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
 
-        Schema::create('student_fees', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('student_id')->unsigned()->index('student_fees_student_id_index')->nullable(false);
+        Schema::create('students_fees_breakups', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('student_id')->unsigned()->index('students_fees_breakups_student_id_index')->nullable(false);
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->integer('academic_fees_id')->unsigned()->index('student_fees_academic_fees_id_index')->nullable(false);
+            $table->integer('academic_fees_id')->unsigned()->index('students_fees_breakups_academic_fees_id_index')->nullable(false);
             $table->foreign('academic_fees_id')->references('id')->on('academic_fees')->onDelete('cascade');
+            $table->string('month_name','30');
             $table->float('total_amount', 8, 2);
             $table->float('paid_amount', 8, 2);
-            $table->float('unpaid_amount', 8, 2);
-            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }
@@ -31,9 +30,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('student_fees', function(Blueprint $table)
+        Schema::table('payment_transactions', function(Blueprint $table)
         {
-            $table->dropIndex('fees_masters_fees_type_id');
+            $table->dropIndex('students_fees_breakups_student_id_index');
+            $table->dropIndex('students_fees_breakups_academic_fees_id_index');
             $table->dropIfExists('dropIfExists');
           
         });

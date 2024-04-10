@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Academic;
+use App\Models\AcademicFee;
 use App\Models\StudentAcademic;
+use App\Models\StudentFeeBreakup;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 
@@ -127,7 +129,7 @@ class StudentsController extends AdminAppController
 
 		if(!empty($current_academic)){
 			// no current class/section found insert the new 
-			$obj_student_academic = StudentAcademic::find($current_academic->id);
+			$obj_student_academic = StudentAcademic::find($current_academic['id']);
 		}
 	
 		$obj_student_academic->student_id = $student_id;
@@ -141,5 +143,44 @@ class StudentsController extends AdminAppController
 		return redirect()->route('admin.students.details',$student_id)->with('success', 'Student academic data save successfully.');
 	
 	}
+
+
+    public function assignFees($studentId){
+        
+        $obj_student_academic  = new StudentAcademic();
+       
+        //get fees already assigned or not   
+
+        $student_details = $obj_student_academic->getStudentCurrentAcademicDetails($studentId);
+        //only process if fees is not assigned to this student this acamenic session
+        if(empty($student_details['is_fees_assigned'])){
+           
+            // get the fees which is assigned for this academic session
+            $obj_academic_fee  = new AcademicFee();
+            $arr_academic_fees =  $obj_academic_fee->getCurrentAssignedFees($student_details['academic_session_id'],$student_details['academic_class_id']);
+        
+            foreach($arr_academic_fees as $academic_fees){
+                $obj_student_fee_breakup  = new StudentFeeBreakup();
+                $data_exist =  $obj_student_fee_breakup->checkAlreadyAssinedFee($studentId,$academic_fees['id']);
+               
+                if(empty($data_exist)){
+                    $amount = $academic_fees['total_amount']/$academic_fees['fees_master']['no_of_payments_in_a_year'];
+
+                    for($i=0;$i<$academic_fees['fees_master']['no_of_payments_in_a_year'];$i++){
+                        
+                        $obj_student_fee_breakup->student_id = $studentId;
+                        $obj_student_fee_breakup->academic_fees_id = $academic_fees['id'];
+                        $obj_student_fee_breakup->month_name = date('M', mktime(0, 0, 0, $i+1, 1));
+                        $obj_student_fee_breakup->total_amount = $amount;
+                        $obj_student_fee_breakup->paid_amount = '0.00';
+                        $obj_student_fee_breakup->save();
+                    }
+                }
+              
+            }
+            
+        }
+        
+    }
 
 }

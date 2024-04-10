@@ -59,13 +59,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/fees/{studentId}', 'feeDetails')->name('admin.students.fees');
         Route::get('/details/{studentId}', 'details')->name('admin.students.details');
         Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');
+        Route::get('/assign-fees/{studentId}', 'assignFees')->name('admin.students.assignFees');
         
     });
 
     Route::middleware(['auth.admin'])->controller(MasterDatasController::class)->prefix('master-data')->group(function () {
 
         Route::get('/academic-fees/{academic_session_id?}', 'academicFees')->name('admin.masterdata.academicFees');
-       // Route::get('/add-edit-student', 'addEdit')->name('admin.masterdata.add_edit');
+        Route::get('/assign-class-fees', 'assignClassFees')->name('admin.masterdata.assignClassFees');
+        Route::post('/save-class-fees', 'saveClassFees')->name('admin.masterdata.saveClassFees');
        // Route::get('/fees/{studentId}', 'feeDetails')->name('admin.masterdata.fees');
        // Route::get('/details/{studentId}', 'details')->name('admin.masterdata.details');
         

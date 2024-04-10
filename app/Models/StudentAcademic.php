@@ -11,6 +11,7 @@ class StudentAcademic extends Model
  
 
 
+ 
     public function academicSession()
     {
         return $this->belongsTo(AcademicSession::class);
@@ -29,15 +30,32 @@ class StudentAcademic extends Model
 
  
 
-    public function getStudentCurrentAcademicDetails($studentId){
+
+     /**
+	 * @desc Get student current academic details
+	 *
+	 * @param int $studentId
+	 *
+	 * @return array
+	 *
+	 */
+
+    public function getStudentCurrentAcademicDetails(int $studentId):array{
         $details = StudentAcademic::select('*')
         ->with('academicSession')
         ->where('student_academic_details.academic_status',1)
         ->where('student_academic_details.student_id', $studentId)
         ->first();
-        return $details;
+
+        if(!empty($details)){
+            return $details->toArray();
+        }
+        return [];
+
     }
 
+
+   
 
 
     public function x_getStudentAcademicDetails($studentId){

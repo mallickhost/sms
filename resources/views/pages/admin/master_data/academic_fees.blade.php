@@ -36,6 +36,13 @@
 										</select>
 									</div>
 								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<br>
+										<a  data-toggle="modal" data-target="#myModal"  class="btn  btn-primary" href="{{ route('admin.masterdata.assignClassFees') }}"><i class="fas fa-plus"></i> Assign Fees to Class</a>
+        
+									</div>
+								</div>
 							</div>
 						
 							<table class="table table-sm">
@@ -47,10 +54,18 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach($arr_class as $class)	
+									@foreach($arr_class_fees as $class_fees)	
 										<tr>
-											<td>{{$class->class_roman_name}}</td>
-											<td>Tuition, Admission, Examination </td>
+											<td>{{$class_fees['class_roman_name']}}</td>
+											<td>
+											@foreach($class_fees['academic_fee'] as $academic_fee)
+												<span class="badge bg-primary">
+													{{$academic_fee['fees_master']['fees_name']}}
+													(₹ {{$academic_fee['total_amount']}})
+												</span>
+										
+											@endforeach
+											</td>
 											<td>
 												<button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#assignFees">
 												<i class="fas fa-link"></i>
@@ -71,7 +86,14 @@
        
 </div>  
 
-@include('pages.admin.master_data.modal_assign_fees')
+<!-- Load Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog modal-lg" role="document" >
+    <div class="modal-content">
+      <!-- modal content goes here -->
+    </div>
+  </div>
+</div>
 
 @endsection
 
@@ -79,7 +101,11 @@
 <script>
 
 $(document).ready(function(){
-  
+    $('a[data-toggle="modal"]').on('click', function(e){
+      e.preventDefault();
+      var targetUrl = $(this).attr('href');
+      $('.modal-content').load(targetUrl);
+    });
 })
 </script>
 @endsection

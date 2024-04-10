@@ -30,7 +30,7 @@
                     <h3 class="profile-username text-center">Sammya Sen Chowdhury</h3>
 
                     <p class="text-muted text-center">S123445</p>
-
+                    <a  href="{{ route('admin.students.assignFees', ['studentId' => 5]) }}" class="btn btn-block btn-success">Assign fees</a>
                     <ul class="list-group list-group-unbordered mb-0">
                       <li class="list-group-item">
                         <b>Class</b> <a class="float-right">IV</a>
@@ -72,7 +72,7 @@
 
                     <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
                     <p class="text-muted">Sukanta Pally, Guma</p>
-                  
+                 
                 </div>
                   <!-- /.card-body -->
                 </div>

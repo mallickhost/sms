@@ -134,9 +134,9 @@
                           </div>
 
                           <div class="col-sm-3">
-						 	<div class="form-group">
+						              	<div class="form-group">
                               <br>
-							  <input type="text"  name='student_id' value='{{$arr_student["id"]}}' >
+							                 <input type="hidden"  name='student_id' value='{{$arr_student["id"]}}' >
                               <button type="submit" class="btn btn-primary float-right">Save changes</button>
                             </div>
                           </div>

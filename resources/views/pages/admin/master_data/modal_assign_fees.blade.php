@@ -1,72 +1,76 @@
-<div class="modal fade" id="assignFees">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Assign Class Fees</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <p>Academic Session 2023-2024 </p>
-                </div>
-                <div class="col-md-4">
-                    <p>Year 2024 </p>
-                </div>
-                <div class="col-md-4">
-                    <p>Class I </p>
-                </div>
-
-            </div>
-            <hr>
-            <form>
-                <div class="row">
-                    <div class="col-5">
-                        <p>1. Tuiton fees</p>
-                    </div>
-                    <div class="col-3">
-                    <p>Monthly (12)</p>
-                    </div>
-                    <div class="col-4">
-                        <input type="text" class="form-control" placeholder="Total Amount">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-5">
-                        <p>2. Admission fees</p>
-                    </div>
-                    <div class="col-3">
-                    <p>Yearly (1)</p>
-                    </div>
-                    <div class="col-4">
-                        <input type="text" class="form-control" placeholder="Total Amount">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-5">
-                        <p>3. Examination Fees</p>
-                    </div>
-                    <div class="col-3">
-                    <p>Quaterly (4)</p>
-                    </div>
-                    <div class="col-4">
-                        <input type="text" class="form-control" placeholder="Total Amount">
-                    </div>
-                </div>
-                <br>
-                
-            </form>
-        </div>
-        <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-        </div>
-        <!-- /.modal-content -->
+<form action="{{ route('admin.masterdata.saveClassFees') }}" method="POST" >
+@csrf
+    <div class="modal-header">
+        <h4 class="modal-title">Assign Class Fees</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-    <!-- /.modal-dialog -->
-</div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <label>Academic Session</label>
+                    <select class="form-control" name='academic_session_id' >
+                    @foreach($arr_session as $session)							
+                        <option value="{{$session->id}}" >{{$session->session_name}}</option>
+                    @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label>Class</label>
+                    <select class="form-control" name='academic_class_id' >
+                    @foreach($arr_class as $class)							
+                        <option value="{{$class->id}}" >{{$class->class_roman_name}}</option>
+                    @endforeach
+                    </select>
+                </div>
+            </div>
+            <!-- <div class="col-5">
+                <input type="text" class="form-control" placeholder=".col-5">
+            </div> -->
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-3">
+                <b>Fees Name</b>
+            </div>
+            <div class="col-3">
+                <b>Payment Type</b>
+            </div>
+            <div class="col-3">
+                <b>No of Payments</b>
+            </div>
+            <div class="col-3">
+                <b>Total Amount</b>
+            </div>
+        </div>
+        <hr>
+        @foreach($arr_fees_master as $master_fee)
+            <div class="row">
+                <div class="col-3">
+                    <p>{{$master_fee->fees_name}}</p>
+                </div>
+                <div class="col-3">
+                    <p>{{$master_fee->payment_type}}</p>
+                </div>
+                <div class="col-3">
+                    <p>{{$master_fee->no_of_payments_in_a_year}}</p>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control"  name='amount[{{$master_fee->id}}]'>
+                </div>
+            </div>
+        @endforeach
+            
+    
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
+
+</form>

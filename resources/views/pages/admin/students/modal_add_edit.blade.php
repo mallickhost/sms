@@ -109,7 +109,7 @@
 		
 		</div>
 
-		<input type="text"  value="{{ old('id', $studentData['id'] ?? '') }}" name='student_id' >
+		<input type="hidden"  value="{{ old('id', $studentData['id'] ?? '') }}" name='student_id' >
 		
 
 </div>
