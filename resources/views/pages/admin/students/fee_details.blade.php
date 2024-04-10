@@ -61,17 +61,17 @@
                   <div class="card-body">
                     <strong><i class="fas fa-user-friends"></i> Parent's Name</strong>
                     <p class="text-muted">
-                    M: Rupali Dhar <br> F: Sankar Dhar
+                    M: {{$student_data['student']['mother_name']}} <br> F: {{$student_data['student']['father_name']}}
                     </p>
                     <hr>
                     <strong><i class="fas fa-phone-alt"></i> Contact Number</strong>
                     <p class="text-muted">
-                    7654567876 <br> 9986655644
+                    {{$student_data['student']['mobile_no_1']}} <br> {{$student_data['student']['mobile_no_2']}}
                     </p>
                     <hr>
 
                     <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
-                    <p class="text-muted">Sukanta Pally, Guma</p>
+                    <p class="text-muted">{{$student_data['student']['address']}}</p>
                  
                 </div>
                   <!-- /.card-body -->
@@ -111,7 +111,8 @@
                                 <div class="form-check">
                                 @if($fee_data['payment_status']=='PARTIALY' || $fee_data['payment_status']=='NOT_PAID' )
                                   <input type="checkbox" name="payment_for[{{$fee_data['id']}}]" class="form-check-input" >
-                               
+                                @else
+                                <input type="checkbox" checked disabled class="form-check-input" >
                                 @endif
                                  
                                 </div>
@@ -135,7 +136,7 @@
                               </td>
                               <td> 
                                 @if($fee_data['payment_status'] == "FULL_PAID" || $fee_data['payment_status']=='PARTIALY'  )
-                                  <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button> 
+                                  <button class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></button> 
                                  
                                   @endif
                                                           
@@ -144,12 +145,12 @@
                               
                             </tr>
 
-                            <tr>
+                            
                             @endforeach
                             
                             
                             <tr>
-                              <td colspan="7">
+                              <td colspan="8">
                                 <input type='hidden' name="student_id" value="{{$student_data['student']['id']}}" >
                                 <button type='submit' class="btn btn-success btn-sm"><i class="far fa-check-square"></i> Paid Checked</button>
                                 <!-- <button class="btn btn-sm btn-info"><i class="fas fa-download"></i> Download all paid receipt</button> -->
