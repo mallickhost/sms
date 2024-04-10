@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('name','50');
             $table->string('email','100')->unique();
             $table->string('password');
-            $table->integer('admin_access_level')->unsigned()->default(1)->comment('1= Super admin, 2= accounts');
+            $table->enum('admin_access_level',['SUPER_ADMIN', 'ACCOUNTS', 'EXAM'])->nullable();
+            // $table->integer('admin_access_level')->unsigned()->default(1)->comment('1= Super admin, 2= accounts');
             $table->boolean('is_active')->default(true);
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();

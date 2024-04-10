@@ -90,9 +90,21 @@ class StudentsController extends AdminAppController
     }
 
 
-    public function feeDetails()
+    public function feeDetails($studentId)
     {
-       return view('pages/admin/students/fee_details');
+        $obj_student = new Student();
+		$student_data = $obj_student->getStudentDetails($studentId);
+
+        if(empty($student_data)){
+			return redirect()->route('admin.students.list')->with('warning', 'something went wrong.');
+		}
+
+        $obj_student_fee_breakup  = new StudentFeeBreakup();
+
+        $arr_fees_data = $obj_student_fee_breakup->getBreakupDetails($studentId);
+
+         //$this->p($arr_fees_data);
+       return view('pages/admin/students/fee_details',compact('student_data','arr_fees_data'));
     }
 
 
@@ -101,13 +113,11 @@ class StudentsController extends AdminAppController
     {
 		// academic session dropdown
 		$obj_student = new Student();
-		$student_data = $obj_student->getStudentDetails($studentId);
+		$arr_student = $obj_student->getStudentDetails($studentId);
 
-		if(empty($student_data)){
+		if(empty($arr_student)){
 			return redirect()->route('admin.students.list')->with('warning', 'something went wrong.');
 		}
-
-		$arr_student = $student_data->toArray();
 
 
 		$obj_academic = new Academic();
@@ -160,19 +170,27 @@ class StudentsController extends AdminAppController
             $arr_academic_fees =  $obj_academic_fee->getCurrentAssignedFees($student_details['academic_session_id'],$student_details['academic_class_id']);
         
             foreach($arr_academic_fees as $academic_fees){
+
                 $obj_student_fee_breakup  = new StudentFeeBreakup();
-                $data_exist =  $obj_student_fee_breakup->checkAlreadyAssinedFee($studentId,$academic_fees['id']);
-               
+             
+
+                $data_exist =  $obj_student_fee_breakup->checkAlreadyAssinedFee($studentId,$academic_fees['academic_session_id'],$academic_fees['fees_master']['id']);
+        
                 if(empty($data_exist)){
+
                     $amount = $academic_fees['total_amount']/$academic_fees['fees_master']['no_of_payments_in_a_year'];
 
                     for($i=0;$i<$academic_fees['fees_master']['no_of_payments_in_a_year'];$i++){
                         
+                       
                         $obj_student_fee_breakup->student_id = $studentId;
-                        $obj_student_fee_breakup->academic_fees_id = $academic_fees['id'];
+                        $obj_student_fee_breakup->fees_master_id = $academic_fees['fees_master']['id'];
+                        $obj_student_fee_breakup->academic_session_id = $academic_fees['academic_session_id'];
+                        //todo the month will be calcuated according to the setting, if needed make a new colom for setting in fee_master
                         $obj_student_fee_breakup->month_name = date('M', mktime(0, 0, 0, $i+1, 1));
                         $obj_student_fee_breakup->total_amount = $amount;
                         $obj_student_fee_breakup->paid_amount = '0.00';
+                
                         $obj_student_fee_breakup->save();
                     }
                 }

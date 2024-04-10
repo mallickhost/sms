@@ -35,11 +35,26 @@ class Student extends Authenticatable
         return $this->hasMany(StudentAcademic::class);
     }
 
-    public function getStudentDetails($studentId){
+
+
+
+     /**
+	 * @desc get student details
+	 *
+	 * @param int $studentId
+	 *
+	 * @return array
+
+	 */
+    public function getStudentDetails(int $studentId):array{
         $details = Student::select()
         ->with(['academicDetails'=>['section','academicClass','academicSession']])
         ->where('students.id', $studentId)
         ->first();
-        return $details;
+
+        if(!empty($details)){
+            return $details->toArray();
+        }
+        return [];
     }
 }

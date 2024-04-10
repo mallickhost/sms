@@ -27,13 +27,13 @@
                           alt="User profile picture">
                     </div>
 
-                    <h3 class="profile-username text-center">Sammya Sen Chowdhury</h3>
+                    <h3 class="profile-username text-center">{{$student_data['student_name']}}</h3>
 
-                    <p class="text-muted text-center">S123445</p>
-                    <a  href="{{ route('admin.students.assignFees', ['studentId' => 5]) }}" class="btn btn-block btn-success">Assign fees</a>
+                    <p class="text-muted text-center">{{$student_data['student_number']}}</p>
+                    <a  href="{{ route('admin.students.assignFees', ['studentId' => $student_data['id']]) }}" class="btn btn-block btn-success">Assign fees</a>
                     <ul class="list-group list-group-unbordered mb-0">
                       <li class="list-group-item">
-                        <b>Class</b> <a class="float-right">IV</a>
+                        <b>Class</b> <a class="float-right">{{$student_data['student_number']}}</a>
                       </li>
                       <li class="list-group-item">
                         <b>section</b> <a class="float-right">B</a>
@@ -94,27 +94,27 @@
                         <thead>
                           <tr>
                             <th style="width: 10px">#</th>
-                            <th style="width: 10px">#</th>
+                            <th>Fee Name</th>
                             <th>Month</th>
-                            <th>Payment Date</th>
-                            <th>Payment Mode</th>
-                            <th>Amount</th>
+                            <th>Total Amount</th>
+                            <th>Paid Amount</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
+                        @foreach ($arr_fees_data as $fee_data)
+                       
                           <tr>
                             <td>
                               <div class="form-check">
                                 <input type="checkbox" class="form-check-input" checked disabled>
                               </div>
-                            </td>
-                            <td>1.</td>                           
-                            <td>January</td>
-                            <td>24-jan-2024</td>
+                            </td>   
+                            <td>{{$fee_data['academic_fees']['fees_master']['fees_name']}}</td>
+                            <td>{{$fee_data['month_name']}}</td>
                             <td>Manual</td>
-                            <td>200</td>
+                            <td>{{$fee_data['total_amount']}}</td>
                             <td>Paid </td>
                             <td> 
                               <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
@@ -125,95 +125,8 @@
                           </tr>
 
                           <tr>
-                          <td>
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" checked disabled>
-                              </div>
-                            </td>
-                            <td>2.</td>
-                            <td>February</td>
-                            <td>22-Feb-2024</td>
-                            <td>Manual</td>
-                            <td>200</td>
-                            <td>Paid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button></td>
-                          </tr>
-
-                          <tr>
-                          <td>
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" checked disabled>
-                              </div>
-                            </td>
-                            <td>3.</td>
-                            <td>March</td>
-                            <td>13-Mar-2024</td>
-                            <td>Online</td>
-                            <td>200</td>
-                            <td>Paid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                          </tr>
-                          <tr>
-                          <td>
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" >
-                              </div>
-                            </td>
-                            <td>4.</td>
-                            <td>April</td>
-                            <td></td>
-                            <td></td>
-                            <td>200</td>
-                            <td>Unpaid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                          </tr>
-                          <tr>
-                          <td>
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" >
-                              </div>
-                            </td>
-                            <td>5.</td>
-                            <td>May</td>
-                            <td></td>
-                            <td></td>
-                            <td>200</td>
-                            <td>Unpaid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                          </tr>
-                          <tr>
-                          <td>
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" >
-                              </div>
-                            </td>
-                            <td>6.</td>
-                            <td>June</td>
-                            <td></td>
-                            <td></td>
-                            <td>200</td>
-                            <td>Unpaid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                          </tr>
+                          @endforeach
+                          
 
                           <tr>
                             <td colspan="7">
