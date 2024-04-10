@@ -27,22 +27,22 @@
                           alt="User profile picture">
                     </div>
 
-                    <h3 class="profile-username text-center">{{$student_data['student_name']}}</h3>
+                    <h3 class="profile-username text-center">{{$student_data['student']['student_name']}}</h3>
 
-                    <p class="text-muted text-center">{{$student_data['student_number']}}</p>
-                    <a  href="{{ route('admin.students.assignFees', ['studentId' => $student_data['id']]) }}" class="btn btn-block btn-success">Assign fees</a>
+                    <p class="text-muted text-center">{{$student_data['student']['student_number']}}</p>
+                    <a  href="{{ route('admin.students.assignFees', ['studentId' => $student_data['student']['id']]) }}" class="btn btn-block btn-success">Assign fees</a>
                     <ul class="list-group list-group-unbordered mb-0">
                       <li class="list-group-item">
-                        <b>Class</b> <a class="float-right">{{$student_data['student_number']}}</a>
+                        <b>Class</b> <a class="float-right">{{$student_data['class']['class_roman_name']}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>section</b> <a class="float-right">B</a>
+                        <b>section</b> <a class="float-right">{{$student_data['section']['name']}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Roll No</b> <a class="float-right">13</a>
+                        <b>Roll No</b> <a class="float-right">{{$student_data['roll_number']}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Gender</b> <a class="float-right">Male</a>
+                        <b>Gender</b> <a class="float-right">{{$student_data['student']['gender']}}</a>
                       </li>
                     </ul>
 
@@ -88,129 +88,59 @@
                         <!-- <a href="{{ route('admin.students.list') }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a> -->
                     </div>
                   </div>
-
-                  <div class="card-body p-0">
-                      <table class="table table-sm">
-                        <thead>
-                          <tr>
-                            <th style="width: 10px">#</th>
-                            <th>Fee Name</th>
-                            <th>Month</th>
-                            <th>Total Amount</th>
-                            <th>Paid Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        @foreach ($arr_fees_data as $fee_data)
-                       
-                          <tr>
-                            <td>
-                              <div class="form-check">
-                                <input type="checkbox" class="form-check-input" checked disabled>
-                              </div>
-                            </td>   
-                            <td>{{$fee_data['academic_fees']['fees_master']['fees_name']}}</td>
-                            <td>{{$fee_data['month_name']}}</td>
-                            <td>Manual</td>
-                            <td>{{$fee_data['total_amount']}}</td>
-                            <td>Paid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>                              
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                            
-                          </tr>
-
-                          <tr>
-                          @endforeach
-                          
-
-                          <tr>
-                            <td colspan="7">
-                              <button class="btn btn-success btn-sm">Paid Checked</button>
-                            </td>
-                          </tr>
-                          
-                        </tbody>
-                      </table>          
-                  </div>
-
-                </div>
-
-
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title text-primary">One time Fees</h3>
-                    
-                  </div>
-
-                  <div class="card-body p-0">
-                      <table class="table table-sm">
-                        <thead>
-                          <tr>
-                            <th style="width: 10px">#</th>
-                            <th>Fee Name</th>
-                            <th>Payment Date</th>
-                            <th>Payment Mode</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1.</td>
-                            <td>Exam Fee</td>
-                            <td>24-jan-2024</td>
-                            <td>Manual</td>
-                            <td>260</td>
-                            <td>Paid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
+                  <form action="{{ route('admin.students.paymentDetails') }}" method="POST">
+                    <div class="card-body p-0">
+                        <table class="table table-sm">
+                          <thead>
+                            <tr>
+                              <th style="width: 10px">#</th>  
+                              <th>Fee Name</th>
+                              <th>Month</th>
+                              <th>Total Amount</th>
+                              <th>Paid Amount</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          @foreach ($arr_fees_data as $fee_data)
+                        
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <input type="checkbox" name="payment_for[{{$fee_data['id']}}]" class="form-check-input" >
+                                </div>
+                              </td>   
+                              <td>{{$fee_data['academic_fees']['fees_master']['fees_name']}}</td>
+                              <td>{{$fee_data['month_name']}}</td>
+                              <td>Manual</td>
+                              <td>{{$fee_data['total_amount']}}</td>
+                              <td>Paid </td>
+                              <td> 
+                                <button class="btn btn-sm btn-primary "><i class="fas fa-rupee-sign"></i></button>
+                                <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>                              
+                                <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
+                              </td>
                               
-                            </td>
+                            </tr>
+
+                            <tr>
+                            @endforeach
                             
-                          </tr>
-
-                          <tr>
-                            <td>2.</td>
-                            <td>Admission Fees</td>
-                            <td>22-Feb-2024</td>
-                            <td>Manual</td>
-                            <td>500</td>
-                            <td>Paid </td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>3.</td>
-                            <td>Other Fee</td>
-                            <td></td>
-                            <td></td>
-                            <td>0</td>
-                            <td></td>
-                            <td> 
-                              <button class="btn btn-sm btn-primary disabled"><i class="fas fa-rupee-sign"></i></button>
-                              <button class="btn btn-sm btn-success"><i class="fas fa-eye"></i></button>
-                              <button class="btn btn-sm btn-info"><i class="fas fa-download"></i></button>
-                            </td>
-                          </tr>
-                          
-                          
-                        </tbody>
-                      </table>          
-                  </div>
-
+                            
+                            <tr>
+                              <td colspan="7">
+                                <input type='hidden' name="student_id" value="{{$student_data['student']['id']}}" >
+                                <button type='submit' class="btn btn-success btn-sm">Paid Checked</button>
+                              </td>
+                            </tr>
+                            
+                          </tbody>
+                        </table>          
+                    </div>
+                  </form>
                 </div>
+
               </div>
               <!-- /.col -->
         </div>

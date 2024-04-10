@@ -204,26 +204,24 @@
                         <thead>
                           <tr>
                             <th>Academic Session</th>
-							<th>Year</th>
+							              <th>Year</th>
                             <th>Class</th>
                             <th>Section</th>
                             <th>Roll No</th>
-							<th>Status</th>
+							              <th>Status</th>
                           </tr>
                         </thead>
                         <tbody>
-						@foreach ($arr_student['academic_details'] as $academic_details)
-                          <tr>                    
-                            <td>{{$academic_details['academic_session']['session_name']}}</td>
-							<td>{{$academic_details['academic_session']['session_year']}}</td>
-							<td>{{$academic_details['academic_class']['class_roman_name']}}</td>
-							<td>{{$academic_details['section']['name']}}</td>
-                            <td>{{$academic_details['roll_number']}}</td>
-							<td><span class="badge bg-primary">Studing</span></td>
-                          </tr>
-						  @endforeach
-                       
-
+                          @foreach ($arr_student['academic_details'] as $academic_details)
+                              <tr>                    
+                                <td>{{$academic_details['academic_session']['session_name']}}</td>
+                                <td>{{$academic_details['academic_session']['session_year']}}</td>
+                                <td>{{$academic_details['class']['class_roman_name']}}</td>
+                                <td>{{$academic_details['section']['name']}}</td>
+                                              <td>{{$academic_details['roll_number']}}</td>
+                                <td><span class="badge bg-primary">Studing</span></td>
+                              </tr>
+                            @endforeach
                         </tbody>
                       </table>     
                   

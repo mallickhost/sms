@@ -21,20 +21,19 @@ class StudentFeeBreakup extends Model
 	 *
 	 * @param int $studentId
      * @param int $academicSessionId
-     * @param int $feeMasterId
+     * @param int $academicFeesId
 	 *
 	 * @return bool
 
 	 */
 
-     public function checkAlreadyAssinedFee(int $studentId , int $academicSessionId,int $feeMasterId):bool{
-        $details = StudentFeeBreakup::select('id')
+     public function checkAlreadyAssinedFee(int $studentId , int $academicSessionId,int $academicFeesId):bool{
+        $details = StudentFeeBreakup::select()
         ->where('student_id',$studentId)
         ->where('academic_session_id', $academicSessionId)
-        ->where('fees_master_id', $feeMasterId)
+        ->where('academic_fees_id', $academicFeesId)
         ->get()
         ->toArray();
-        
         if(!empty($details)){
             return true;
         }
@@ -49,20 +48,39 @@ class StudentFeeBreakup extends Model
 	 * @desc check the academic_fees is already assigned or not
 	 *
 	 * @param int $studentId
+     * @param int $academicSessionId
 	 *
 	 * @return array
 
 	 */
 
-     public function getBreakupDetails(int $studentId):array{
+     public function getStudentFeesBreakupDetails(int $studentId,int $academicSessionId):array{
         return StudentFeeBreakup::select()
         ->with(['academicFees'=>['feesMaster']])
         ->where('student_id',$studentId)
+        ->where('academic_session_id',$academicSessionId)
         ->get()
         ->toArray();
 
-        
-       
+    }
+
+
+
+     /**
+	 * @desc check the academic_fees is already assigned or not
+	 *
+	 * @param array $breakupIds
+	 *
+	 * @return array
+
+	 */
+
+     public function getBreakupDetailsByIds(array $breakupIds):array{
+        return StudentFeeBreakup::select()
+        ->with(['academicFees'=>['feesMaster']])
+        ->whereIn('id',$breakupIds)
+        ->get()
+        ->toArray();
 
     }
 

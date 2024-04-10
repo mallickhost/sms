@@ -48,7 +48,7 @@ class Student extends Authenticatable
 	 */
     public function getStudentDetails(int $studentId):array{
         $details = Student::select()
-        ->with(['academicDetails'=>['section','academicClass','academicSession']])
+        ->with(['academicDetails'=>['section','class','academicSession']])
         ->where('students.id', $studentId)
         ->first();
 
@@ -57,4 +57,6 @@ class Student extends Authenticatable
         }
         return [];
     }
+
+    
 }

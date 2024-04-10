@@ -60,6 +60,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/details/{studentId}', 'details')->name('admin.students.details');
         Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');
         Route::get('/assign-fees/{studentId}', 'assignFees')->name('admin.students.assignFees');
+        Route::post('/payment-details', 'paymentDetails')->name('admin.students.paymentDetails');
         
     });
 

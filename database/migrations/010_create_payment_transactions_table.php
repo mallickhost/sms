@@ -16,12 +16,11 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('students_fees_breakup_id')->unsigned()->index('payment_transactions_students_fees_breakup_id_index')->nullable(false);
             $table->foreign('students_fees_breakup_id')->references('id')->on('students_fees_breakups')->onDelete('cascade');
-            $table->string('transaction_type','50');
+            $table->enum('payment_mode',['MANUAL', 'ONLINE'])->nullable(false)->default('MANUAL');
             $table->string('payment_date','50');
-            $table->string('txn_number','50');
+            $table->string('transaction_number','60');
             $table->float('paid_amount', 8, 2);
             $table->boolean('is_paid')->default(false);
-            $table->string('txn_note','255');
             $table->timestamps();
         });
     }

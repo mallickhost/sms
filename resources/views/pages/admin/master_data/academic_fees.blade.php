@@ -58,16 +58,22 @@
 										<tr>
 											<td>{{$class_fees['class_roman_name']}}</td>
 											<td>
-											@foreach($class_fees['academic_fee'] as $academic_fee)
-												<span class="badge bg-primary">
-													{{$academic_fee['fees_master']['fees_name']}}
-													(₹ {{$academic_fee['total_amount']}})
-												</span>
-										
-											@endforeach
+												@if(!empty($class_fees['academic_fee']))	
+													@foreach($class_fees['academic_fee'] as $academic_fee)
+														<span class="badge bg-primary">
+															{{$academic_fee['fees_master']['fees_name']}}
+															(₹ {{$academic_fee['total_amount']}})
+														</span>
+												
+													@endforeach
+												@else
+													<span class="badge bg-danger">
+														No fees is assigned
+													</span>
+												@endif
 											</td>
 											<td>
-												<button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#assignFees">
+												<a href="#"  class="btn btn-sm btn-primary" data-toggle="modal" data-target="#assignFees">
 												<i class="fas fa-link"></i>
 												</button>
 											</td>

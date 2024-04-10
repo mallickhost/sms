@@ -12,6 +12,7 @@
                     </div>
                     <!-- <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
+                          {{ $consumerInfo['attributes']['gender']== 'Man'? 'checked="checked"' : '' }}
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
                             <li class="breadcrumb-item active">Blank Page</li>
                         </ol>

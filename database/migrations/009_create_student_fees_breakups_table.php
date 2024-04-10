@@ -16,8 +16,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('student_id')->unsigned()->index('students_fees_breakups_student_id_index')->nullable(false);
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->integer('fees_master_id')->unsigned()->index('students_fees_breakups_fees_master_id_index')->nullable(false);
-            $table->foreign('fees_master_id')->references('id')->on('fees_masters')->onDelete('cascade');
+            $table->integer('academic_fees_id')->unsigned()->index('students_fees_breakups_academic_fees_id_index')->nullable(false);
+            $table->foreign('academic_fees_id')->references('id')->on('academic_fees')->onDelete('cascade');
             $table->integer('academic_session_id')->unsigned()->index('students_fees_breakups_academic_session_id_index')->nullable(false);
             $table->foreign('academic_session_id')->references('id')->on('academic_sessions')->onDelete('cascade');
             $table->string('month_name','30');
@@ -35,7 +35,7 @@ return new class extends Migration
         Schema::table('payment_transactions', function(Blueprint $table)
         {
             $table->dropIndex('students_fees_breakups_student_id_index');
-            $table->dropIndex('students_fees_breakups_fees_master_id_index');
+            $table->dropIndex('students_fees_breakups_academic_fees_id_index');
             $table->dropIndex('students_fees_breakups_academic_session_id_index');
             $table->dropIfExists('dropIfExists');
           

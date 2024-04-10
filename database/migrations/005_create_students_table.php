@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('student_number','50')->unique();
             $table->string('aadhaar_number','50')->unique();
             $table->string('dob','30')->nullable();
-            $table->string('gender','10');
+            $table->enum('gender',['M', 'F', 'T'])->nullable();
             $table->string('admission_date','30')->nullable();
             $table->string('father_name','150');
             $table->string('mother_name','150')->nullable();
