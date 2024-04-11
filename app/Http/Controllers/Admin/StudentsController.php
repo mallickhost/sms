@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Academic as AppAcademic;
-use App\Http\Controllers\Admin;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Academic;
@@ -13,6 +12,7 @@ use App\Models\StudentFeeBreakup;
 use App\Models\PaymentTransaction;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
+
 
 
 class StudentsController extends AdminAppController
@@ -43,30 +43,46 @@ class StudentsController extends AdminAppController
 
     public function saveStudent(Request $request)
     {
+        
         $request->validate([
             'student_name' => 'required|max:100',
             'student_number' => 'required',
-            'aadhaar_number' => 'required',
             'gender' => 'required',
+            'mobile_no_1' => 'required',
+            'father_name' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
           ]);
-    
-		$request_data = $request->all();
 
+          
+
+
+        $file_name = '';
+        if ($request->hasFile('uplaod_pic')) {
+            $file = request()->file('uplaod_pic');
+            $file_name =  $file->store('students_images', ['disk' => 'local']);
+            $request->request->add(['picture' => $file_name]);
+           
+        }
 
 		DB::beginTransaction();
 
 		try {
 
-			Student::create($request_data);
+			Student::create($request->all());
 
 			DB::commit();
-		} catch (\Exception $e) {
+
+            return redirect()->route('admin.students.list')->with('success', 'Student created successfully.');
+
+		} catch (Exception $e) {
 			// Handle transaction failure
 			DB::rollBack();
+            return redirect()->route('admin.students.list')->with('danger',$e->getMessage());
 		}
-		
 
-        return redirect()->route('admin.students.list')->with('success', 'Student created successfully.');
+       
+
+        return redirect()->route('admin.students.list')->with('danger', 'Unable to save Student data.');
       
     }
 
@@ -76,7 +92,6 @@ class StudentsController extends AdminAppController
         $request->validate([
             'student_name' => 'required|max:100',
             'student_number' => 'required',
-            'aadhaar_number' => 'required',
             'gender' => 'required',
           ]);
 
@@ -134,10 +149,15 @@ class StudentsController extends AdminAppController
 
 
 		$request_data = $request->all();
-		$student_id = $request_data['student_id'];
+        $student_id = $request_data['student_id'];
+
+        if(empty($request_data['academic_session_id'])){
+            return redirect()->route('admin.students.details',$student_id)->with('danger', 'Academic session is not set');
+        }
+	
 		$obj_student_academic  = new StudentAcademicDetail();
 		$current_academic = $obj_student_academic->getStudentCurrentAcademicDetails($student_id);
-
+$this->p($current_academic);
 		if(!empty($current_academic)){
 			// no current class/section found insert the new 
 			$obj_student_academic = StudentAcademicDetail::find($current_academic['id']);
@@ -150,9 +170,24 @@ class StudentsController extends AdminAppController
 		$obj_student_academic->roll_number = $request_data['roll_number'];
         // check 
 		$obj_student_academic->academic_status ='RUNNING';
-		$obj_student_academic->save();
 
-		return redirect()->route('admin.students.details',$student_id)->with('success', 'Student academic data save successfully.');
+        DB::beginTransaction();
+
+		try {
+
+            $obj_student_academic->save();
+
+			DB::commit();
+
+            return redirect()->route('admin.students.details',$student_id)->with('success', 'Student academic data save successfully.');
+
+		} catch (Exception $e) {
+			// Handle transaction failure
+			DB::rollBack();
+            return redirect()->route('admin.students.details',$student_id)->with('danger',$e->getMessage());
+		}
+	
+
 	
 	}
 

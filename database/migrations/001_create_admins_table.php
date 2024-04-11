@@ -19,8 +19,11 @@ return new class extends Migration
             $table->string('email','100')->unique();
             $table->string('password','100');
             $table->enum('admin_access_level',['SUPER_ADMIN', 'ACCOUNTANT', 'EXAMINER'])->nullable();
+            $table->string('last_login_at','30')->nullable();
+            $table->string('last_login_ip','60')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_deleted')->default(false);
+            $table->rememberToken();
             $table->timestamps();
         });
 // best example https://buttercms.com/blog/laravel-migrations-ultimate-guide/#:~:text=Also%2C%20to%20check%20if%20a,email%22%20column...%20%7D
@@ -30,7 +33,8 @@ return new class extends Migration
             [
                 'name' => 'Super Admin',
                 'email' => 'admin@mail.com',
-                'password' => Hash::make('123')
+                'password' => Hash::make('123'),
+                'admin_access_level'=> 'SUPER_ADMIN'
             ]
         );  
     }

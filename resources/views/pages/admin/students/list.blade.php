@@ -23,8 +23,7 @@
               <h3 class="card-title">Students List</h3>
               <div class="card-tools">
               <a  data-toggle="modal" data-target="#myModal"  class="btn btn-tool btn-warning" href="{{ route('admin.students.add_edit') }}"><i class="fas fa-plus"></i> Add new Student</a>
-           
-               
+         
                  
               </div>
             </div>
@@ -123,8 +122,8 @@
                           <td> {{ $student->aadhaar_number }}</td>
                           <td> {{ $student->mobile_no_1 }}</td>
                           <td>
-                            <a target="_blank" title="Fees details"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a>
-                            <a target="_blank" title="Academic details" class="btn btn-sm btn-info" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i></a>
+                            <a  title="Fees details"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a>
+                            <a  title="Academic details" class="btn btn-sm btn-info" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i></a>
                             <a title="Edit Studetn" data-toggle="modal" data-target="#myModal"  class="btn btn-sm btn-success" href="{{ route('admin.students.add_edit', ['studentId' => $student->id]) }}"><i class="fas fa-pencil-alt"></i></a>
                           </td>
                         </tr>
@@ -171,11 +170,79 @@ $(document).ready(function(){
 
 
 
-  $('a[data-toggle="modal"]').on('click', function(e){
-      e.preventDefault();
-      var targetUrl = $(this).attr('href');
-      $('.modal-content').load(targetUrl);
-    });
+$('a[data-toggle="modal"]').on('click', function(e){
+  e.preventDefault();
+  var targetUrl = $(this).attr('href');
+  $('.modal-content').load(targetUrl, function() {
+      //  jQuery code modal
+
+           $(function () {
+              $.validator.setDefaults({
+                // submitHandler: function () {
+                //   $('#frm_save_student').submit();
+                // }
+              });
+              $('#frm_save_student').validate({
+                rules: {
+                  student_name: {
+                    required: true,
+                  },
+                  student_number: {
+                    required: true
+                  },
+                  mobile_no_1: {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 10,
+                    digits: true
+                  },
+                  mobile_no_1: {
+                    required: false,
+                    minlength: 10,
+                    maxlength: 10,
+                    digits: true
+                  },
+                  aadhaar_number: {
+                    required: false,
+                    minlength: 12,
+                    maxlength: 12,
+                    digits: true
+                  },
+                  father_name: {
+                    required: true
+                  },
+                  address: {
+                    required: true
+                  },
+                },
+                messages: {
+                  student_name: {
+                    required: "Student name is required",
+                  },
+                  
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                  error.addClass('invalid-feedback');
+                  element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                  $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                  $(element).removeClass('is-invalid');
+                }
+              });
+            });
+
+
+        // -----------------------
+  });
+});
+
+
+
+
 
 
 //https://www.youtube.com/watch?v=msiGe5U9HFU

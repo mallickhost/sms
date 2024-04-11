@@ -73,7 +73,7 @@
                     <div class="small-box bg-purple">
                         <div class="inner">
                         <h3>65</h3>
-                        <p>RapidRX Clients</p>
+                        <p>Clients</p>
                         </div>
                         <div class="icon">
                         <i class="ion ion-pie-graph"></i>

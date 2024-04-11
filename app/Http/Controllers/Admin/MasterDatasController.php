@@ -50,6 +50,10 @@ class MasterDatasController extends AdminAppController
     public function saveClassFees(Request $request){
         $request_data = $request->all();
 
+        if(empty($request_data['academic_session_id'])){
+            return redirect()->route('admin.masterdata.academicFees')->with('danger', 'Academic session is not set');
+        }
+
         foreach($request_data['amount'] as $fee_id => $fee_amount){
             if(!empty($fee_amount)){
                 $obj_academic_fees = new AcademicFee();

@@ -1,10 +1,10 @@
 
 
 @if (isset( $studentData['id'] ))
-    <form action="{{ route('admin.students.updateStudent') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.students.updateStudent') }}" method="POST" id='frm_save_student' enctype="multipart/form-data">
     @method('PUT')
 @else
-    <form action="{{ route('admin.students.saveStudent') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.students.saveStudent') }}" method="POST" id='frm_save_student'  enctype="multipart/form-data">
 @endif
 
 @csrf
@@ -52,15 +52,15 @@
 			<div class="col-sm-3">
 				<div class="form-group">
 				<label>Date of Birth</label>
-				<input type="date" class="form-control" value="{{ old('dob', $studentData['dob'] ?? '') }}"  name='dob' >
+				<input type="date" class="form-control" value="{{ old('dob', $studentData['dob'] ?? '') }}"  name='dob'  max="{{ date('Y-m-d') }}">
 				</div>
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
 				<label>Gender</label>
 				<select class="form-control"   name='gender' >
-					<option value="M">Male</option>
-					<option value="F">Female</option>
+					<option value="MALE">Male</option>
+					<option value="FEMALE">Female</option>
 				</select></div>
 			</div>
 			<div class="col-sm-3">
@@ -81,17 +81,31 @@
 		
 
 		<div class="row">                        
-			<div class="col-sm-6">
+			<div class="col-sm-3">
 				<div class="form-group">
 				<label>Father's Name</label>
 				<input type="text" class="form-control" value="{{ old('father_name', $studentData['father_name'] ?? '') }}"  name='father_name'  >
 				</div>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-3">
 				<!-- text input -->
 				<div class="form-group">
 				<label>Mother's Name</label>
 				<input type="text" class="form-control" value="{{ old('mother_name', $studentData['mother_name'] ?? '') }}"  name='mother_name' >
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+				<label>Admission date</label>
+				<input type="date" class="form-control" value="{{ old('admission_date', $studentData['admission_date'] ?? '') }}"  name='admission_date' max="{{ date('Y-m-d') }}" >
+				
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<!-- text input -->
+				<div class="form-group">
+				<label>Student Picture</label>
+				<input type="file" class="form-control"   name='uplaod_pic' >
 				</div>
 			</div>
 			
@@ -103,7 +117,7 @@
 				<!-- textarea -->
 				<div class="form-group">
 				<label>Address</label>
-				<textarea class="form-control" rows="3" value="{{ old('address', $studentData['address'] ?? '') }}"  name='address' ></textarea>
+				<textarea class="form-control" rows="3"  name='address' >{{ old('address', $studentData['address'] ?? '') }}</textarea>
 				</div>
 			</div>
 		
@@ -118,4 +132,3 @@
 	<button type="submit" class="btn btn-success">Save</button>
 </div>
 </form>
-        

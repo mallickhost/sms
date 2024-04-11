@@ -99,7 +99,7 @@
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label>Academic Session</label>
-                              <select class="form-control" name='academic_session_id' >
+                              <select class="form-control" name='academic_session_id' readonly >
                                 @foreach($arr_session as $session)							
                                   <option value="{{$session->id}}" >{{$session->session_name}}</option>
                                 @endforeach
