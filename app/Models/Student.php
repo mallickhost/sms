@@ -32,7 +32,7 @@ class Student extends Authenticatable
 
 	public function academicDetails()
     {
-        return $this->hasMany(StudentAcademic::class);
+        return $this->hasMany(StudentAcademicDetail::class);
     }
 
 

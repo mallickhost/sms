@@ -21,7 +21,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label>Class</label>
-                    <select class="form-control" name='academic_class_id' >
+                    <select class="form-control" name='class_master_id' >
                     @foreach($arr_class as $class)							
                         <option value="{{$class->id}}" >{{$class->class_roman_name}}</option>
                     @endforeach

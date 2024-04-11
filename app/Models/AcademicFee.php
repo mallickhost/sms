@@ -20,20 +20,20 @@ class AcademicFee extends Model
 	  /**
 	 * @desc Get any fees is already assign to the provided academic sesstion 
 	 *
-	 * @param int $academic_session_id
-	 * @param int $fees_master_id
-	 * @param int $academic_class_id
+	 * @param int $academicSessionId
+	 * @param int $feesMasterId
+	 * @param int $classMasterId
 	 *
 	 * @return array
 	 *
 	 */
 
-	public function checkExistingFees(int $academic_session_id,int $fees_master_id,int $academic_class_id):array{
+	public function checkExistingFees(int $academicSessionId,int $feesMasterId,int $classMasterId):array{
 
 		return AcademicFee::select('id')
-		->where('fees_master_id', $fees_master_id)
-		->where('academic_session_id', $academic_session_id)
-		->where('academic_class_id', $academic_class_id)
+		->where('fees_master_id', $feesMasterId)
+		->where('academic_session_id', $academicSessionId)
+		->where('class_master_id', $classMasterId)
 		->where('is_deleted', false)
 		->get()
 		->toArray();
@@ -46,19 +46,19 @@ class AcademicFee extends Model
 	  /**
 	 * @desc Get Assigned fees to the class in current academic session
 	 *
-	 * @param int $academic_session_id
-	 * @param int $academic_class_id
+	 * @param int $academicSessionId
+	 * @param int $classMasterId
 	 *
 	 * @return array
 	 *
 	 */
 
-	public function getCurrentAssignedFees(int $academic_session_id,int $academic_class_id):array{
+	public function getCurrentAssignedFees(int $academicSessionId,int $classMasterId):array{
 
 		return AcademicFee::select()
 		->with('feesMaster')
-		->where('academic_session_id', $academic_session_id)
-		->where('academic_class_id', $academic_class_id)
+		->where('academic_session_id', $academicSessionId)
+		->where('class_master_id', $classMasterId)
 		->where('is_deleted', false)
 		->get()
 		->toArray();

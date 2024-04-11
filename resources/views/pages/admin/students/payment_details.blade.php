@@ -54,7 +54,7 @@
 						<div class="row">
 							<div class="col-4">
 								<div class="form-group">
-									<label>Date</label>
+									<label>Payment Date</label>
 									<input type="date" name="payment_date" class="form-control" value="{{ date('Y-m-d') }}" max="{{ date('Y-m-d') }}" >
 								</div>
 							</div>

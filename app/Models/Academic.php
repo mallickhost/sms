@@ -26,7 +26,7 @@ class Academic extends Model
 
 	public function list_class(){
 
-		$class = DB::table('academic_classes')->select('id','class_name', 'class_roman_name')->where('is_deleted', false)->get();
+		$class = DB::table('class_masters')->select('id','class_name', 'class_roman_name')->where('is_deleted', false)->get();
 		return $class->toArray();
 	}
 

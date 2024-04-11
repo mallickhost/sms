@@ -4,9 +4,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class AcademicClass extends Model
+class ClassMaster extends Model
 {
-    protected $table = 'academic_classes';
+    protected $table = 'class_masters';
 
     public function academicFee()
     {
@@ -17,7 +17,7 @@ class AcademicClass extends Model
 
     public function getFeeDetails($academic_session_id){
 
-		$class = AcademicClass::select()
+		$class = ClassMaster::select()
         ->with(['academicFee'=>['feesMaster']])
         ->where('is_deleted', false)
 		->get();

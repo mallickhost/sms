@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FeesMaster;
 use App\Models\Academic;
 use App\Models\AcademicFee;
-use App\Models\AcademicClass;
+use App\Models\ClassMaster;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +21,8 @@ class MasterDatasController extends AdminAppController
 		$arr_session = $obj_academic->list_session();
         $arr_class = $obj_academic->list_class();
 
-        $obj_academic_fee = new AcademicClass();
+        // todo need to here dynamic
+        $obj_academic_fee = new ClassMaster();
         $arr_class_fees  = $obj_academic_fee->getFeeDetails(2);
 
 
@@ -52,10 +53,10 @@ class MasterDatasController extends AdminAppController
         foreach($request_data['amount'] as $fee_id => $fee_amount){
             if(!empty($fee_amount)){
                 $obj_academic_fees = new AcademicFee();
-                $existing = $obj_academic_fees->checkExistingFees($request_data['academic_session_id'],$fee_id,$request_data['academic_class_id']);
+                $existing = $obj_academic_fees->checkExistingFees($request_data['academic_session_id'],$fee_id,$request_data['class_master_id']);
                 if(empty($existing)){
                     $obj_academic_fees->academic_session_id = $request_data['academic_session_id'];
-                    $obj_academic_fees->academic_class_id = $request_data['academic_class_id'];
+                    $obj_academic_fees->class_master_id = $request_data['class_master_id'];
                     $obj_academic_fees->fees_master_id = $fee_id;
                     $obj_academic_fees->total_fees_amount = $fee_amount;
                     $obj_academic_fees->save();

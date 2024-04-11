@@ -4,9 +4,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class StudentAcademic extends Model
+class StudentAcademicDetail extends Model
 {
-   protected $table = 'student_academic_details';
+   protected $table = 'students_academic_details';
 
  
 
@@ -26,7 +26,7 @@ class StudentAcademic extends Model
 
     public function class()
     {
-        return $this->belongsTo(AcademicClass::class,'academic_class_id');
+        return $this->belongsTo(ClassMaster::class,'class_master_id');
     }
 
     public function section()
@@ -47,10 +47,10 @@ class StudentAcademic extends Model
 	 */
 
     public function getStudentCurrentAcademicDetails(int $studentId):array{
-        $details = StudentAcademic::select()
+        $details = StudentAcademicDetail::select()
         ->with(['academicSession','student','class','section'])
-        ->where('student_academic_details.academic_status','RUNNING')
-        ->where('student_academic_details.student_id', $studentId)
+        ->where('students_academic_details.academic_status','RUNNING')
+        ->where('students_academic_details.student_id', $studentId)
         ->first();
 
         if(!empty($details)){
@@ -65,12 +65,12 @@ class StudentAcademic extends Model
 
 
     public function x_getStudentAcademicDetails($studentId){
-        $details = StudentAcademic::select('*')
+        $details = StudentAcademicDetail::select('*')
        // ->leftJoin('academic_sessions', 'academic_sessions.id', '=', 'student_academic_details.academic_session_id')
        ->with(['academicSession' => function ($query) {
             $query->where('is_current', true);
         }])
-        ->where('student_academic_details.student_id', $studentId)
+        ->where('students_academic_details.student_id', $studentId)
         ->get();
         return $details->toArray();
     }

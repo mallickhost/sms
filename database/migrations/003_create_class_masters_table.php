@@ -14,7 +14,7 @@ return new class extends Migration
     {
 
         //todo need to insert data as this table does no have ui for edit/add
-        Schema::create('academic_classes', function (Blueprint $table) {
+        Schema::create('class_masters', function (Blueprint $table) {
             $table->increments('id');
             $table->string('class_name','30');
             $table->string('class_roman_name','10');
@@ -48,7 +48,7 @@ return new class extends Migration
             'class_roman_name' => 'IV'
         ]];
         
-        DB::table('academic_classes')->insert($data); 
+        DB::table('class_masters')->insert($data); 
     }
 
     /**
@@ -56,6 +56,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('academic_classes');
+        Schema::dropIfExists('class_masters');
     }
 };

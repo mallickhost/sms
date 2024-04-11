@@ -127,7 +127,7 @@
                                   @if($fee_data['payment_status'] == "FULL_PAID")
                                   <span class="badge bg-success">Paid</span>
                                   @elseif($fee_data['payment_status']=='PARTIALY')
-                                   <span class="badge bg-warning">Partialy</span>
+                                   <span class="badge bg-warning">Partially</span>
                                   @else
                                   <span class="badge bg-danger">Not Paid</span>
                                   @endif
