@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('students_fees_breakups_id')->unsigned()->index('payment_transactions_students_fees_breakups_id_index')->nullable(false);
             $table->foreign('students_fees_breakups_id')->references('id')->on('students_fees_breakups')->onDelete('cascade');
             $table->enum('payment_mode',['CASH', 'ONLINE'])->nullable(false)->default('CASH');
-            $table->string('payment_date','50');
+            $table->string('payment_date','30');
             $table->string('transaction_number','60');
             $table->float('paid_amount', 8, 2);
             $table->boolean('is_paid')->default(false);

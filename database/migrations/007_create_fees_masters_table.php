@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('fees_masters', function (Blueprint $table) {
             $table->increments('id');
             $table->string('fees_name','150');
-            $table->string('no_of_payments_in_a_year','50');
-            $table->string('payment_type','150');
+            $table->string('no_of_payments_in_a_year','10');
+            $table->string('payment_type','100');
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
