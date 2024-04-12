@@ -3,34 +3,71 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use Illuminate\Http\Request;
+
+use App\Models\Section;
 use App\Models\Student;
-use App\Models\Academic;
+use App\Models\ClassMaster;
 use App\Models\AcademicFee;
-use App\Models\StudentAcademicDetail;
+use App\Models\AcademicSession;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Models\StudentFeeBreakup;
 use App\Models\PaymentTransaction;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
+use App\Models\StudentAcademicDetail;
+use Illuminate\Support\Facades\Storage;
 
 
 
 class StudentsController extends AdminAppController
 {
-    public function list(Request $request)
-    {
+
+
+
+
+
+
+
+
+
+       /**
+	 * @desc Student list for laravel pagination
+	 *
+	 * @param Request $request
+	 *
+	 * @return View
+
+	 */
+    public function list(Request $request):View {
 
         // print_r($request);die('xxx');
         $students = Student::latest()->paginate(10);
         //echo "<Pre/>";print_r($movies);die('xx');
         // die('this is student login page');
         // Session::flash('success', 'Successfully registerd now login'); StudentsAppController
-        return View::make("pages/admin/students/list")->with('students',$students);
+        return view('pages/admin/students/list',compact('students'));
         //return view('pages/admin/students/list');
     }
 
-    public function addEdit($studentId=null)
-    {
+
+
+
+
+
+
+
+
+    /**
+	 * @desc open add edit modal
+	 *
+	 * @param int|null $studentId
+	 *
+	 * @return View
+
+	 */
+
+    public function addEdit(int|null $studentId=null):View {
 
 		$studentData = [];
 		if(!empty($studentId)){
@@ -41,8 +78,20 @@ class StudentsController extends AdminAppController
     }
 
 
-    public function saveStudent(Request $request)
-    {
+
+
+
+
+      /**
+	 * @desc open add edit modal
+	 *
+	 * @param Request $request
+	 *
+	 * @return RedirectResponse
+
+	 */
+
+    public function saveStudent(Request $request):RedirectResponse {
         
         $request->validate([
             'student_name' => 'required|max:100',
@@ -59,7 +108,7 @@ class StudentsController extends AdminAppController
         $file_name = '';
         if ($request->hasFile('uplaod_pic')) {
             $file = request()->file('uplaod_pic');
-            $file_name =  $file->store('students_images', ['disk' => 'local']);
+            $file_name =  $file->store('students_images', ['disk' => 'public']);
             $request->request->add(['picture' => $file_name]);
            
         }
@@ -87,27 +136,87 @@ class StudentsController extends AdminAppController
     }
 
 
-    public function updateStudent(Request $request)
-    {
+
+
+
+
+
+
+
+
+     /**
+	 * @desc open add edit modal
+	 *
+	 * @param Request $request
+	 *
+	 * @return RedirectResponse
+
+	 */
+
+    public function updateStudent(Request $request):RedirectResponse{
         $request->validate([
             'student_name' => 'required|max:100',
             'student_number' => 'required',
             'gender' => 'required',
+            'mobile_no_1' => 'required',
+            'father_name' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
           ]);
 
 		$request_data = $request->all();
 		$student = Student::find($request_data['student_id']);
  
-        $student->update($request_data);
+        $file_name = '';
+        if ($request->hasFile('uplaod_pic')) {
+ 
+            $existing_file_path = ''.$student->picture;
 
-        return redirect()->route('admin.students.list')
-      ->with('success', 'Student update successfully.');
+            if (Storage::exists($existing_file_path)) {
+                Storage::delete($existing_file_path);
+            }
+
+            $file = request()->file('uplaod_pic');
+            $file_name =  $file->store('students_images', ['disk' => 'public']);
+            $student->picture = $file_name;
+           
+        }
+
+
+        DB::beginTransaction();
+
+		try {
+
+            $student->update($request_data);
+
+			DB::commit();
+
+            return redirect()->route('admin.students.list')->with('success', 'Student updated successfully.');
+
+		} catch (Exception $e) {
+			// Handle transaction failure
+			DB::rollBack();
+            return redirect()->route('admin.students.list')->with('danger',$e->getMessage());
+		}
+       
       
     }
 
 
-    public function feeDetails($studentId)
-    {
+
+
+
+
+
+     /**
+	 * @desc open add edit modal
+	 *
+	 * @param int $studentId
+	 *
+	 * @return View
+
+	 */
+
+    public function feeDetails(int $studentId):View {
         $obj_student_academic = new StudentAcademicDetail();
 		$student_data = $obj_student_academic->getStudentCurrentAcademicDetails($studentId);
 
@@ -117,7 +226,7 @@ class StudentsController extends AdminAppController
 
         $obj_student_fee_breakup  = new StudentFeeBreakup();
 
-        $arr_fees_data = $obj_student_fee_breakup->getStudentFeesBreakupDetails($studentId,$student_data['academic_session_id']);
+        $arr_fees_data = $obj_student_fee_breakup->getStudentFeesBreakupDetails($student_data['academic_session_id'],$studentId);
 
          //$this->p($arr_fees_data);
        return view('pages/admin/students/fee_details',compact('student_data','arr_fees_data'));
@@ -125,8 +234,21 @@ class StudentsController extends AdminAppController
 
 
 
-    public function details($studentId=null)
-    {
+
+
+
+
+
+     /**
+	 * @desc Session list for dropdown
+	 *
+	 * @param int $studentId
+	 *
+	 * @return View
+
+	 */
+
+    public function details(int $studentId=null): View {
 		// academic session dropdown
 		$obj_student = new Student();
 		$arr_student = $obj_student->getStudentDetails($studentId);
@@ -134,42 +256,97 @@ class StudentsController extends AdminAppController
 		if(empty($arr_student)){
 			return redirect()->route('admin.students.list')->with('warning', 'something went wrong.');
 		}
+    
+
+        $obj_academic_session = new AcademicSession();
+		$arr_session = $obj_academic_session->sessionLIst();
+
+        $obj_class_master = new ClassMaster();
+        $arr_class = $obj_class_master->classList();
+
+        $obj_section = new Section();
+        $arr_section = $obj_section->sectionList();
 
 
-		$obj_academic = new Academic();
-		$arr_session = $obj_academic->list_session();
-		$arr_class = $obj_academic->list_class();
-		$arr_section = $obj_academic->list_section();
-		
-       return view('pages/admin/students/details',compact('arr_session','arr_class','arr_section','arr_student'));
+        $obj_academic_details = new StudentAcademicDetail();
+        $arr_history = $obj_academic_details->getStudentAcademicHistory($studentId);
+
+    //    $this->p($arr_history);
+       return View('pages/admin/students/details',compact('arr_session','arr_class','arr_section','arr_student','arr_history'));
     }
 
 
-	public function updateAcademicDetails(Request $request){
 
+
+
+
+
+
+   /**
+	 * @desc open add edit modal
+	 *
+	 * @param Request $request
+	 *
+	 * @return RedirectResponse
+
+	 */
+
+	public function updateAcademicDetails(Request $request):RedirectResponse{
+
+        $request->validate([
+            'academic_session_id' => 'required',
+            'student_id' => 'required',
+            'class_master_id' => 'required',
+            'section_id' => 'required',
+            'roll_number' => 'required'
+          ]);
 
 		$request_data = $request->all();
-        $student_id = $request_data['student_id'];
 
-        if(empty($request_data['academic_session_id'])){
-            return redirect()->route('admin.students.details',$student_id)->with('danger', 'Academic session is not set');
+
+		if(!empty($request_data['id'])){
+			
+			$obj_student_academic = StudentAcademicDetail::find($request_data['id']);
+           
+
+            // check if the class fees is already assign and paid then class not changed
+            // if the fees is assigned but not paid then delete all assigned
+
+            if($obj_student_academic->class_master_id != $request_data['class_master_id']){
+              
+                $obj_student_fee_breakup  = new StudentFeeBreakup();
+                
+                $arr_paid_fees = $obj_student_fee_breakup->checkAnyFeesPaid($obj_student_academic->academic_session_id,$obj_student_academic->student_id);
+
+                if(!empty($arr_paid_fees)){
+                    return redirect()->route('admin.students.details',$obj_student_academic->student_id)->with('danger',"Already fees paid can't change the class");
+                }else{
+                    $obj_student_fee_breakup->deleteAssignFees($obj_student_academic->academic_session_id,$obj_student_academic->student_id); 
+                
+                }
+             
+            }
+
+		}else{
+            $obj_student_academic = new StudentAcademicDetail();
         }
-	
-		$obj_student_academic  = new StudentAcademicDetail();
-		$current_academic = $obj_student_academic->getStudentCurrentAcademicDetails($student_id);
-$this->p($current_academic);
-		if(!empty($current_academic)){
-			// no current class/section found insert the new 
-			$obj_student_academic = StudentAcademicDetail::find($current_academic['id']);
-		}
-	
-		$obj_student_academic->student_id = $student_id;
+       
+
+
+
+		$obj_student_academic->student_id = $request_data['student_id'];
 		$obj_student_academic->academic_session_id = $request_data['academic_session_id'];
 		$obj_student_academic->class_master_id = $request_data['class_master_id'];
 		$obj_student_academic->section_id = $request_data['section_id'];
 		$obj_student_academic->roll_number = $request_data['roll_number'];
         // check 
-		$obj_student_academic->academic_status ='RUNNING';
+
+        if(!empty($request_data['is_passed'])){
+            $obj_student_academic->academic_status ='PASSED';
+        }else{
+            $obj_student_academic->academic_status ='RUNNING';
+        }
+
 
         DB::beginTransaction();
 
@@ -179,12 +356,12 @@ $this->p($current_academic);
 
 			DB::commit();
 
-            return redirect()->route('admin.students.details',$student_id)->with('success', 'Student academic data save successfully.');
+            return redirect()->route('admin.students.details',$request_data['student_id'])->with('success', 'Student academic data save successfully.');
 
 		} catch (Exception $e) {
 			// Handle transaction failure
 			DB::rollBack();
-            return redirect()->route('admin.students.details',$student_id)->with('danger',$e->getMessage());
+            return redirect()->route('admin.students.details',$request_data['student_id'])->with('danger',$e->getMessage());
 		}
 	
 
@@ -192,7 +369,16 @@ $this->p($current_academic);
 	}
 
 
-    public function assignFees($studentId){
+
+       /**
+	 * @desc open add edit modal
+	 *
+	 * @param int $studentId
+	 *
+	 * @return RedirectResponse
+
+	 */
+    public function assignFees(int $studentId):RedirectResponse{
         
         $obj_student_academic  = new StudentAcademicDetail();
        
@@ -246,8 +432,15 @@ $this->p($current_academic);
 
 
 
+   /**
+	 * @desc open add edit modal
+	 *
+	 * @param Request $request
+	 *
+	 * @return View
 
-    public function paymentDetails(Request $request){
+	 */
+    public function paymentDetails(Request $request):View{
 
 
 		$request_data = $request->all();
@@ -274,7 +467,23 @@ $this->p($current_academic);
 
 
 
-    public function makePayment(Request $request){
+
+
+
+
+
+
+
+
+         /**
+	 * @desc open add edit modal
+	 *
+	 * @param Request $request
+	 *
+	 * @return RedirectResponse
+
+	 */
+    public function makePayment(Request $request):RedirectResponse{
 
 
 		$request_data = $request->all();
@@ -321,7 +530,6 @@ $this->p($current_academic);
             $obj_fee_breakup->payment_status = $payment_status;
             $obj_fee_breakup->save();
 
-// $this->p($obj_fee_breakup);
 
 
         }
@@ -330,4 +538,47 @@ $this->p($current_academic);
        
 	}
 
+
+
+    
+
+
+
+
+
+
+
+
+
+         /**
+	 * @desc open add edit modal
+	 *
+	 * @param int $academicDetailsId
+	 *
+	 * @return View
+
+	 */
+    public function editAcademicDetails(int $academicDetailsId):View{
+        $obj_academic_session = new AcademicSession();
+		$arr_session = $obj_academic_session->sessionLIst();
+
+        $obj_class_master = new ClassMaster();
+        $arr_class = $obj_class_master->classList();
+
+        $obj_section = new Section();
+        $arr_section = $obj_section->sectionList();
+
+        $obj_student_academic =  StudentAcademicDetail::find($academicDetailsId);
+
+
+        return view('pages/admin/students/modal_edit_academic_details',compact('arr_session','arr_class','arr_section','obj_student_academic'));
+    }
+
+
+    public function promoteToNextClass($studentId){
+
+
+        return view('pages/admin/students/modal_promot_next_class');
+       }
+    
 }

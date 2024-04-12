@@ -39,8 +39,10 @@ class Student extends Authenticatable
 
 
 
+    
+
      /**
-	 * @desc get student details
+	 * @desc get student details with running academics
 	 *
 	 * @param int $studentId
 	 *
@@ -49,8 +51,13 @@ class Student extends Authenticatable
 	 */
     public function getStudentDetails(int $studentId):array{
         $details = Student::select()
-        ->with(['academicDetails'=>['section','class','academicSession']])
+        ->with(['academicDetails'=> function($q)  {
+
+            $q->where('academic_status', 'RUNNING'); 
+            $q->with(['section','class','academicSession']);
+        }])
         ->where('students.id', $studentId)
+        ->where('students.is_deleted', false)
         ->first();
 
         if(!empty($details)){

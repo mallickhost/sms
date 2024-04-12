@@ -7,4 +7,22 @@ use Illuminate\Support\Facades\DB;
 class Section extends Model
 {
     protected $table = 'sections';
+
+
+
+
+    /**
+	 * @desc Section list for dropdown
+	 *
+	 *
+	 * @return array
+
+	 */
+
+	public function sectionList(){
+
+		$section= DB::table('sections')->select('id','name')->where('is_deleted', false)->get();
+		return $section->toArray();
+	}
+    
 }

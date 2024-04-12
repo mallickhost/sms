@@ -15,6 +15,22 @@ class ClassMaster extends Model
 
 
 
+
+       /**
+	 * @desc Class list for dropdown
+	 *
+	 *
+	 * @return array
+
+	 */
+
+    public function classList():array{
+
+		$class = DB::table('class_masters')->select('id','class_name', 'class_roman_name')->where('is_deleted', false)->get();
+		return $class->toArray();
+	}
+
+
     public function getFeeDetails($academic_session_id){
 
 		$class = ClassMaster::select()

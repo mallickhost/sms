@@ -61,7 +61,7 @@ class StudentFeeBreakup extends Model
 
 	 */
 
-     public function getStudentFeesBreakupDetails(int $studentId,int $academicSessionId):array{
+     public function getStudentFeesBreakupDetails(int $academicSessionId,int $studentId):array{
         return StudentFeeBreakup::select()
         ->with(['academicFees'=>['feesMaster'],'paymentTransactions'])
         ->where('student_id',$studentId)
@@ -71,6 +71,62 @@ class StudentFeeBreakup extends Model
 
     }
 
+
+
+
+
+
+
+
+
+
+
+     /**
+	 * @desc check the academic_fees is assigned or not
+	 *
+	 * @param int $studentId
+     * @param int $academicSessionId
+	 *
+	 * @return array
+
+	 */
+
+     public function checkAnyFeesPaid(int $academicSessionId,int $studentId):array{
+        return StudentFeeBreakup::select()
+        ->where('academic_session_id',$academicSessionId)
+        ->where('student_id',$studentId)
+        ->whereIn('payment_status', ['PARTIALY','FULL_PAID'])
+        ->get()
+        ->toArray();
+
+    }
+
+
+
+
+
+
+
+
+
+
+       /**
+	 * @desc check the academic_fees is assigned or not
+	 *
+	 * @param int $studentId
+     * @param int $academicSessionId
+	 *
+	 * @return bool
+
+	 */
+
+     public function deleteAssignFees(int $academicSessionId,int $studentId):bool{
+      return StudentFeeBreakup::where('academic_session_id',$academicSessionId)
+        ->where('student_id',$studentId)
+        ->where('payment_status', 'NOT_PAID')
+        ->delete();
+
+    }
 
 
      /**

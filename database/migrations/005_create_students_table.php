@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('mobile_no_1','20')->nullable(false);
             $table->string('mobile_no_2','20')->nullable();
             $table->text('address')->nullable();
-            $table->string('picture','50')->nullable();
+            $table->string('picture','150')->nullable();
             $table->string('email','200')->nullable();
             $table->string('password','100')->nullable();
             $table->boolean('is_login_enabled')->default(false);

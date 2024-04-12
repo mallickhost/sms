@@ -38,13 +38,40 @@ class StudentAcademicDetail extends Model
 
 
      /**
-	 * @desc Get student current academic details
+	 * @desc Get student academic details history
 	 *
 	 * @param int $studentId
 	 * 
 	 * @return array
 	 *
 	 */
+
+
+     public function getStudentAcademicHistory(int $studentId):array{
+        return StudentAcademicDetail::select()
+        ->with(['academicSession','class','section'])
+        ->where('students_academic_details.student_id', $studentId)
+        ->orderBy('students_academic_details.id','desc')
+        ->get()
+        ->toArray();
+
+    }
+
+
+
+
+
+
+ /**
+	 * @desc Get student current running class
+	 *
+	 * @param int $studentId
+	 * 
+	 * @return array
+	 *
+	 */
+
+
 
     public function getStudentCurrentAcademicDetails(int $studentId):array{
         $details = StudentAcademicDetail::select()

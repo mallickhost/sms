@@ -18,72 +18,37 @@
         <div class="row">
           <div class="col-12">
 
-          <div class="card card-primary ">
+          <div class="card card-primary card-outline">
             <div class="card-header">
               <h3 class="card-title">Students List</h3>
-              <div class="card-tools">
-              <a  data-toggle="modal" data-target="#myModal"  class="btn btn-tool btn-warning" href="{{ route('admin.students.add_edit') }}"><i class="fas fa-plus"></i> Add new Student</a>
-         
-                 
-              </div>
             </div>
             <div class="card-body" >
               
-            <form action="{{ route('admin.students.list') }}" method="GET">
-            @csrf
-              <div class="row">
-                  <div class="col-sm-2">
-                    <div class="form-group">
-                        <label>Student Name</label>
-                        <input type="text" name="student_name" class="form-control" placeholder="Enter ...">
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="form-group">
-                        <label>Student Number</label>
-                        <input type="text" name="student_number" class="form-control" placeholder="Enter ...">
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="form-group">
-                        <label>Class</label>
-                        <select class="form-control" name="student_class">
-                          <option>--- Select ---</option>
-                          <option>LKG</option>
-                          <option>Class I</option>
-                          <option>Class II</option>
-                          <option>Class III</option>
-                          <option>Class IV</option>
-                        </select>
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="form-group">
-                        <label>Section</label>
-                        <select class="form-control" name="class_section">
-                          <option>--- Select ---</option>
-                          <option>Sec A</option>
-                          <option>Sec B</option>
-                        </select>
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="form-group">
-                        <label>Roll No.</label>
-                        <input type="text" name="roll_number" class="form-control" placeholder="Roll No.">
-                    </div>
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="form-group">
-                        <br>
-                        <button class="btn btn-md btn-success"><i class="fas fa-search"></i> </button>
-                        <button class="btn btn-md btn-info"><i class="fas fa-undo"></i></button>
-                    </div>
-                  </div>
-              </div>
+				<form action="{{ route('admin.students.list') }}" method="GET">
+				@csrf
 
 
-            </form>
+					<div class="row">
+						<div class="col-3">
+							<input type="text" name="student_name" class="form-control" placeholder="Student Name">
+						</div>
+						<div class="col-3">
+							<input type="text" name="student_number" class="form-control" placeholder="Student Number">
+						</div>
+						<div class="col-2">
+							<input type="text" name="mobile_number" class="form-control" placeholder="Mobile Number">
+						</div>
+																					
+						<div class="col-2">
+							<button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i> Search</button>
+							<button class="btn btn-sm btn-outline-primary"><i class="fas fa-undo"></i></button>
+						</div>
+						<div class="col-2">
+							<a  data-toggle="modal" data-target="#myModal"  class="btn btn-outline-primary" href="{{ route('admin.students.add_edit') }}"><i class="fas fa-user-plus"></i> Add Student</a>
+						</div>
+					</div>
+
+				</form>
             </div>
           </div>
 
@@ -123,8 +88,8 @@
                           <td> {{ $student->mobile_no_1 }}</td>
                           <td>
                             <a  title="Fees details"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a>
-                            <a  title="Academic details" class="btn btn-sm btn-info" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i></a>
-                            <a title="Edit Studetn" data-toggle="modal" data-target="#myModal"  class="btn btn-sm btn-success" href="{{ route('admin.students.add_edit', ['studentId' => $student->id]) }}"><i class="fas fa-pencil-alt"></i></a>
+                            <a  title="Academic details" class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i> View</a>
+                            <a title="Edit Student" data-toggle="modal" data-target="#myModal"  class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.add_edit', ['studentId' => $student->id]) }}"><i class="fas fa-pencil-alt"></i> Edit</a>
                           </td>
                         </tr>
                       @endforeach

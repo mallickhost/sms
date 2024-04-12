@@ -9,7 +9,7 @@ class FeesMaster extends Model
     protected $table = 'fees_masters';
 
 
-    public function listFees(){
+    public function feesList(){
 
 		$class = DB::table('fees_masters')->select('id','fees_name', 'no_of_payments_in_a_year','payment_type')->where('is_deleted', false)->get();
 		return $class->toArray();

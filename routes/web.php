@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Admin\MyAccountController as AdminMyAccount;
+use App\Http\Controllers\Admin\MyAccountsController as AdminMyAccounts;
 use App\Http\Controllers\Admin\StudentsController as AdminStudents;
 use App\Http\Controllers\Students\MyAccountController as StudentsMyAccount;
 use App\Http\Controllers\Teachers\MyAccountController as TeachersMyAccount;
@@ -39,7 +39,7 @@ Route::controller(HomeController::class)->group(function () {
 //-------------------- ADMIN prefix and urls --------------------
 Route::prefix('admin')->group(function () {
 
-    Route::controller(AdminMyAccount::class)->group(function () {
+    Route::controller(AdminMyAccounts::class)->group(function () {
 
         Route::get('/', 'login')->name('admin.login');
         Route::post('/do-login', 'doLogin')->name('admin.doLogin');
@@ -58,7 +58,9 @@ Route::prefix('admin')->group(function () {
         Route::put('/update-student', 'updateStudent')->name('admin.students.updateStudent');
         Route::get('/fees/{studentId}', 'feeDetails')->name('admin.students.fees');
         Route::get('/details/{studentId}', 'details')->name('admin.students.details');
+        Route::get('/edit-academic-details/{academicDetailsId}', 'editAcademicDetails')->name('admin.students.editAcademicDetails');
         Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');
+        Route::get('/promote-to-next-class/{studentId}', 'promoteToNextClass')->name('admin.students.promoteToNextClass');
         Route::get('/assign-fees/{studentId}', 'assignFees')->name('admin.students.assignFees');
         Route::post('/payment-details', 'paymentDetails')->name('admin.students.paymentDetails');
         Route::post('/make-payment', 'makePayment')->name('admin.students.makePayment');
