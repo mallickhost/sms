@@ -575,10 +575,45 @@ class StudentsController extends AdminAppController
     }
 
 
+
+
+
+
+
+
+
+
+
+         /**
+	 * @desc open add edit modal
+	 *
+	 * @param int $studentId
+	 *
+	 * @return View
+
+	 */
+    public function displayFees(int $studentId):View{
+        $obj_student_academic = new StudentAcademicDetail();
+		$student_data = $obj_student_academic->getStudentCurrentAcademicDetails($studentId);
+
+        if(empty($student_data)){
+			return redirect()->route('admin.students.list')->with('warning', 'Academic details not added.');
+		}
+
+        $obj_student_fee_breakup  = new StudentFeeBreakup();
+
+        $arr_fees_data = $obj_student_fee_breakup->getStudentFeesBreakupDetails($student_data['academic_session_id'],$studentId);
+
+
+
+        return view('pages/admin/students/modal_display_fees',compact('student_data','arr_fees_data'));
+    }
+
+
     public function promoteToNextClass($studentId){
 
 
-        return view('pages/admin/students/modal_promot_next_class');
+        return view('pages/admin/students/modal_promote_next_class');
        }
     
 }

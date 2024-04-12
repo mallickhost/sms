@@ -62,6 +62,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');
         Route::get('/promote-to-next-class/{studentId}', 'promoteToNextClass')->name('admin.students.promoteToNextClass');
         Route::get('/assign-fees/{studentId}', 'assignFees')->name('admin.students.assignFees');
+        Route::get('/show-fees/{studentId}', 'displayFees')->name('admin.students.displayFees');
         Route::post('/payment-details', 'paymentDetails')->name('admin.students.paymentDetails');
         Route::post('/make-payment', 'makePayment')->name('admin.students.makePayment');
         
