@@ -56,12 +56,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/add-edit-student/{studentId?}', 'addEdit')->name('admin.students.add_edit');
         Route::post('/save-student', 'saveStudent')->name('admin.students.saveStudent');
         Route::put('/update-student', 'updateStudent')->name('admin.students.updateStudent');
-        Route::get('/fees/{studentId}', 'feeDetails')->name('admin.students.fees');
+        Route::get('/fees/{studentId}/{academicSessionId?}', 'feeDetails')->name('admin.students.fees');
         Route::get('/details/{studentId}', 'details')->name('admin.students.details');
         Route::get('/edit-academic-details/{academicDetailsId}', 'editAcademicDetails')->name('admin.students.editAcademicDetails');
         Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');
         Route::get('/promote-to-next-class/{studentId}', 'promoteToNextClass')->name('admin.students.promoteToNextClass');
-        Route::get('/assign-fees/{studentId}', 'assignFees')->name('admin.students.assignFees');
+        Route::get('/assign-fees/{studentId}/{sessionId}', 'assignFees')->name('admin.students.assignFees');
         Route::get('/show-fees/{studentId}', 'displayFees')->name('admin.students.displayFees');
         Route::post('/payment-details', 'paymentDetails')->name('admin.students.paymentDetails');
         Route::post('/make-payment', 'makePayment')->name('admin.students.makePayment');
@@ -70,8 +70,8 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth.admin'])->controller(MasterDatasController::class)->prefix('master-data')->group(function () {
 
-        Route::get('/academic-fees/{academic_session_id?}', 'academicFees')->name('admin.masterdata.academicFees');
-        Route::get('/assign-class-fees', 'assignClassFees')->name('admin.masterdata.assignClassFees');
+        Route::get('/academic-fees/{selectedSessionId?}', 'academicFees')->name('admin.masterdata.academicFees');
+        Route::get('/assign-class-fees/{academicSessionId}/{classId}', 'assignClassFees')->name('admin.masterdata.assignClassFees');
         Route::post('/save-class-fees', 'saveClassFees')->name('admin.masterdata.saveClassFees');
        // Route::get('/fees/{studentId}', 'feeDetails')->name('admin.masterdata.fees');
        // Route::get('/details/{studentId}', 'details')->name('admin.masterdata.details');

@@ -16,80 +16,106 @@
             @include('includes.flash')
 
             <div class="row">
-              <div class="col-md-3">
+				<div class="col-md-3">
 
-                <!-- Profile Image -->
+				<!-- Profile Image -->
+				<div class="card card-primary card-outline">
+					<div class="card-body box-profile">
+						<div class="text-center">
+						@php
+                          $profile_img = 'assets/img/f_profile_pic.png';
+                        @endphp
+
+                        @if(empty($arr_student['picture']))
+                          @if($arr_student['student']['gender'] == 'MALE')
+                          @php
+                            $profile_img = 'assets/img/m_profile_pic.png';
+                          @endphp
+                          @elseif($arr_student['student']['gender']=="FEMALE")
+                          @php
+                            $profile_img = 'assets/img/f_profile_pic.png';
+                          @endphp
+                          @endif
+
+                        @else
+                          @php
+                            $profile_img = 'storage/'.$arr_student['student']['picture'];
+                          @endphp
+                          
+                        @endif	
+
+						<img class="profile-user-img img-fluid img-circle"
+						src="{{asset($profile_img)}}"
+							alt="User profile picture">
+						</div>
+
+						<h3 class="profile-username text-center">{{$arr_student['student']['student_name']}}</h3>
+
+						<p class="text-muted text-center">{{$arr_student['student']['student_number']}}</p>
+
+						
+						
+						<ul class="list-group list-group-unbordered mb-0">
+						<li class="list-group-item" style="padding: 5px;">
+							<b>Class</b> <a class="float-right">{{$arr_student['class']['class_roman_name']}}</a>
+						</li>
+						<li class="list-group-item" style="padding: 5px;">
+							<b>section</b> <a class="float-right">{{$arr_student['section']['name']}}</a>
+						</li>
+						<li class="list-group-item" style="padding: 5px;">
+							<b>Roll No</b> <a class="float-right">{{$arr_student['roll_number']}}</a>
+						</li>
+					
+						</ul>
+						<br>
+
+						@if(empty($arr_fees_data))
+						<a  href="{{ route('admin.students.assignFees', ['studentId' => $arr_student['student_id'],'sessionId' => $arr_student['academic_session_id']]) }}" class="btn btn-block btn-outline-primary">Assign fees</a>
+						@endif
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+
+				<!-- About Me Box -->
+				<div class="card card-default">
+					<div class="card-header">
+					<h3 class="card-title">Student Additional Info</h3>
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body">
+					<strong><i class="fas fa-user-friends"></i> Parent's Name</strong>
+					<p class="text-muted">
+					M: {{$arr_student['student']['mother_name']}} <br> F: {{$arr_student['student']['father_name']}}
+					</p>
+					<hr>
+					<strong><i class="fas fa-phone-alt"></i> Contact Number</strong>
+					<p class="text-muted">
+					{{$arr_student['student']['mobile_no_1']}}<br>{{$arr_student['student']['mobile_no_2']}}
+					</p>
+					<hr>
+
+					<strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
+					<p class="text-muted">{{$arr_student['student']['address']}}</p>
+					
+				</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+				</div>
+				<div class="col-md-9">
+                
                 <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                    <div class="text-center">
-                      <img class="profile-user-img img-fluid img-circle"
-                          src="{{asset('assets/img/avatar-b.png')}}"
-                          alt="User profile picture">
-                    </div>
-
-                    <h3 class="profile-username text-center">{{$student_data['student']['student_name']}}</h3>
-
-                    <p class="text-muted text-center">{{$student_data['student']['student_number']}}</p>
-                    <a  href="{{ route('admin.students.assignFees', ['studentId' => $student_data['student']['id']]) }}" class="btn btn-block btn-success">Assign fees</a>
-                    <ul class="list-group list-group-unbordered mb-0">
-                      <li class="list-group-item">
-                        <b>Class</b> <a class="float-right">{{$student_data['class']['class_roman_name']}}</a>
-                      </li>
-                      <li class="list-group-item">
-                        <b>section</b> <a class="float-right">{{$student_data['section']['name']}}</a>
-                      </li>
-                      <li class="list-group-item">
-                        <b>Roll No</b> <a class="float-right">{{$student_data['roll_number']}}</a>
-                      </li>
-                      <li class="list-group-item">
-                        <b>Gender</b> <a class="float-right">{{$student_data['student']['gender']}}</a>
-                      </li>
-                    </ul>
-
-                  
-                  </div>
-                  <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-
-                <!-- About Me Box -->
-                <div class="card card-default">
                   <div class="card-header">
-                    <h3 class="card-title">Student Additional Info</h3>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <strong><i class="fas fa-user-friends"></i> Parent's Name</strong>
-                    <p class="text-muted">
-                    M: {{$student_data['student']['mother_name']}} <br> F: {{$student_data['student']['father_name']}}
-                    </p>
-                    <hr>
-                    <strong><i class="fas fa-phone-alt"></i> Contact Number</strong>
-                    <p class="text-muted">
-                    {{$student_data['student']['mobile_no_1']}} <br> {{$student_data['student']['mobile_no_2']}}
-                    </p>
-                    <hr>
-
-                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
-                    <p class="text-muted">{{$student_data['student']['address']}}</p>
-                 
-                </div>
-                  <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-              </div>
-              <!-- /.col -->
-              <div class="col-md-9">
-                @if(!empty($arr_fees_data))
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title text-danger">Fees Breakups</h3>
+                    <h3 class="card-title text-primary">Fees Breakups</h3>
                     <div class="card-tools">
-                        <!-- <a href="{{ route('admin.students.list') }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a> -->
+                        <a href="{{ route('admin.students.details',$arr_student['student']['id']) }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a>
                     </div>
                   </div>
-                  <form action="{{ route('admin.students.paymentDetails') }}" method="POST">
+				 
                     <div class="card-body p-0">
+					@if(!empty($arr_fees_data))
+                 	 <form action="{{ route('admin.students.paymentDetails') }}" method="POST">
                         <table class="table table-sm">
                           <thead>
                             <tr>
@@ -112,7 +138,7 @@
                                 @if($fee_data['payment_status']=='PARTIALY' || $fee_data['payment_status']=='NOT_PAID' )
                                   <input type="checkbox" name="payment_for[{{$fee_data['id']}}]" class="form-check-input" >
                                 @else
-                                <input type="checkbox" checked disabled class="form-check-input" >
+                                <input type="checkbox" disabled checked class="form-check-input" >
                                 @endif
                                  
                                 </div>
@@ -151,23 +177,27 @@
                             
                             <tr>
                               <td colspan="8">
-                                <input type='hidden' name="student_id" value="{{$student_data['student']['id']}}" >
-                                <button type='submit' class="btn btn-success btn-sm"><i class="far fa-check-square"></i> Paid Checked</button>
+                                <input type='hidden' name="student_id" value="{{$arr_student['student']['id']}}" >
+                                <button type='submit' class="btn btn-outline-primary"><i class="far fa-check-square"></i> Paid Checked</button>
                                 <!-- <button class="btn btn-sm btn-info"><i class="fas fa-download"></i> Download all paid receipt</button> -->
                               </td>
                             </tr>
                             
                           </tbody>
-                        </table>          
+                        </table>   
+						</form>  
+						
+						
+						@else
+						<span class="badge bg-danger">No fee is assign to this student please assign fees.</span>
+						@endif
                     </div>
-                  </form>
+                 
+				
                 </div>
-                @else
-                <span class="badge bg-danger">No fee is assign to this student please assign fees.</span>
-                @endif
+               
               </div>
-              <!-- /.col -->
-        </div>
+       		</div>
             
 
           

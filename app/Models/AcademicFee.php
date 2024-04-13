@@ -16,6 +16,12 @@ class AcademicFee extends Model
     }
 
 
+	public function class()
+    {
+        return $this->belongsTo(ClassMaster::class,'class_master_id');
+    }
+
+
 
 	  /**
 	 * @desc Get any fees is already assign to the provided academic sesstion 
@@ -64,6 +70,10 @@ class AcademicFee extends Model
 		->toArray();
 
 	}
+
+
+
+
 
 
 }

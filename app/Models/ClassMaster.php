@@ -26,18 +26,73 @@ class ClassMaster extends Model
 
     public function classList():array{
 
-		$class = DB::table('class_masters')->select('id','class_name', 'class_roman_name')->where('is_deleted', false)->get();
+		$class = ClassMaster::select(['id','class_name', 'class_roman_name'])
+		->where('is_deleted', false)
+		->get();
 		return $class->toArray();
 	}
 
 
-    public function getFeeDetails($academic_session_id){
+
+
+
+
+
+
+
+
+
+
+
+	     /**
+	 * @desc Class list for dropdown
+	 * @param int $academicSessionId
+	 *
+	 * @return array
+
+	 */
+
+    public function getFeeDetails(int $academicSessionId):array{
 
 		$class = ClassMaster::select()
-        ->with(['academicFee'=>['feesMaster']])
+        ->with(['academicFee'=>function($q) use($academicSessionId){
+			$q->where('academic_session_id',$academicSessionId);
+			$q->with('feesMaster');
+		}])
         ->where('is_deleted', false)
 		->get();
 		return $class->toArray();
+	}
+
+
+
+
+
+
+
+
+
+
+
+	     /**
+	 * @desc Class detaisl by id
+	 * 
+	 * @param int $classId
+	 *
+	 * @return array
+
+	 */
+
+	 public function getClassDetailsById(int $classId):array{
+
+		$class = ClassMaster::select()
+        ->where('id', $classId)
+		->first();
+
+        if(!empty($class)){
+            return $class->toArray();
+        }
+        return [];
 	}
 
 }

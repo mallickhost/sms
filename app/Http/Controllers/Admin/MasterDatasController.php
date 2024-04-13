@@ -27,29 +27,38 @@ class MasterDatasController extends AdminAppController
         /**
 	 * @desc Do the login 
 	 *
-	 * @param int $academicSessionId
+	 * @param int $sessionId
 	 *
 	 * @return View
 
 	 */
-    public function academicFees(int $academicSessionId=null):View {
+    public function academicFees(int $selectedSessionId=null):View {
+
     
+      
 
         $obj_academic_session = new AcademicSession();
-		$arr_session = $obj_academic_session->sessionLIst();
+		$arr_all_session = $obj_academic_session->sessionList();
         
-
-        // todo need to here dynamic
+// $this->p($arr_all_session);
         $obj_class_master = new ClassMaster();
-        $arr_class_fees  = $obj_class_master->getFeeDetails(2);
 
+
+        if(empty($selectedSessionId)){
+            //get the current session id
+            $selectedSessionId = $obj_academic_session->getCurrentSessionId();
+           
+        }
+       
+      
+        $arr_class_fees  = $obj_class_master->getFeeDetails($selectedSessionId);
 
         $arr_class = $obj_class_master->classList();
 
 
-		// $current_academic_session = $obj_academic->getCurrentAcademicSession();
+		$selected_academic_session_details = $obj_academic_session->getSessionDetailsById($selectedSessionId);
 
-        return view("pages/admin/master_data/academic_fees",compact('arr_session','arr_class','arr_class_fees'));
+        return view("pages/admin/master_data/academic_fees",compact('arr_all_session','arr_class','arr_class_fees','selected_academic_session_details'));
    
     }
 
@@ -59,23 +68,29 @@ class MasterDatasController extends AdminAppController
 
      /**
 	 * @desc Assign the class fees
-	 *
+	 * @param int $sessionId
+     * @param int $classId
+     * 
 	 *
 	 * @return View
 
 	 */
+    public function assignClassFees(int $sessionId,int $classId):View {
+  
 
-    public function assignClassFees():View {
+        $obj_academic_fees = new AcademicFee();
+        $arr_current_fess = $obj_academic_fees->getCurrentAssignedFees($sessionId,$classId);
+
         $obj_academic_session = new AcademicSession();
-		$arr_session = $obj_academic_session->sessionLIst();
+		$arr_session = $obj_academic_session->getSessionDetailsById($sessionId);
 
         $obj_class_master = new ClassMaster();
-        $arr_class = $obj_class_master->classList();
+        $arr_class = $obj_class_master->getClassDetailsById($classId);
 
         $obj_fees = new FeesMaster();
         $arr_fees_master = $obj_fees->feesList();
 
-        return view('pages/admin/master_data/modal_assign_fees',compact('arr_session','arr_class','arr_fees_master'));
+        return view('pages/admin/master_data/modal_assign_fees',compact('arr_fees_master','arr_current_fess','arr_session','arr_class'));
    
     }
 
@@ -93,14 +108,30 @@ class MasterDatasController extends AdminAppController
 	 */
 
     public function saveClassFees(Request $request):RedirectResponse{
+
+        //todo need to add more logic for if fees is not assign then can change amount.. if 0 amount then delete the fees
+
         $request_data = $request->all();
 
-        if(empty($request_data['academic_session_id'])){
-            return redirect()->route('admin.masterdata.academicFees')->with('danger', 'Academic session is not set');
-        }
+        $request->validate([
+            'academic_session_id' => 'required',
+            'class_master_id' => 'required'
+          ]);
 
-        foreach($request_data['amount'] as $fee_id => $fee_amount){
+        // $this->p($request_data);
+
+
+        foreach($request_data['fee_amount'] as $fee_id => $fee_amount){
+
+            
+
+            // if not paid then 
             if(!empty($fee_amount)){
+                // if fee is paid does not change the amount
+
+
+
+
                 $obj_academic_fees = new AcademicFee();
                 $existing = $obj_academic_fees->checkExistingFees($request_data['academic_session_id'],$fee_id,$request_data['class_master_id']);
                 if(empty($existing)){
@@ -113,7 +144,7 @@ class MasterDatasController extends AdminAppController
             }
         }
 
-        return redirect()->route('admin.masterdata.academicFees')->with('success', 'Fees data save successfully.');
+        return redirect()->route('admin.masterdata.academicFees',[$request_data['academic_session_id']])->with('success', 'Fees data save successfully.');
         
     }
 

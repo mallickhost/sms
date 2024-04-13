@@ -18,39 +18,61 @@
             <div class="row">
                
 
-				<div class="col-md-12">
-					<div class="card">
+				<div class="col-md-3">
+					<div class="card card-primary card-outline">
 						<div class="card-header">
-							<h3 class="card-title text-primary">Academic Fees</h3>
+							<h3 class="card-title text-primary">Academic Sessions</h3>
 						</div>
 						<div class="card-body ">
+					
+						
+							<table class="table table-sm">
+								<thead>
+									<tr>
+										<th>Session</th>							
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($arr_all_session as $arr_session)	
 
-							<div class="row">
-								<div class="col-md-4">
-									<div class="form-group">
-										<label>Academic Session</label>
-										<select class="form-control"  name='academic_session_id' >
-											@foreach($arr_session as $session)							
-												<option value="{{$session->id}}" >{{$session->session_name}}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-										<br>
-										<a  data-toggle="modal" data-target="#myModal"  class="btn  btn-primary" href="{{ route('admin.masterdata.assignClassFees') }}"><i class="fas fa-plus"></i> Assign Fees to Class</a>
-        
-									</div>
-								</div>
-							</div>
+									@if($arr_session['id'] == $selected_academic_session_details['id'])
+									<tr class="table-primary">
+									@else
+									<tr>
+									@endif
+										
+											<td>{{$arr_session['session_name']}}
+												@if(!empty($arr_session['is_current']))
+												<span class="badge bg-success"><i class="fas fa-check" title="Current Session"></i></span></td>
+												@endif
+											<td>
+											<a  title="Fees details" class="btn btn-xs btn-outline-primary" href="{{ route('admin.masterdata.academicFees', ['selectedSessionId' => $arr_session['id']]) }}"><i class="fas fa-eye"></i> View</a>
+											</td>
+										</tr>
+									@endforeach
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-9">
+					<div class="card  card-primary card-outline">
+						<div class="card-header">
+							<h3 class="card-title "><span class="text-primary">Academic Fees for - </span><span class="badge bg-primary">{{$selected_academic_session_details['session_name']}}</span> </h3>
+						</div>
+						<div class="card-body ">
+						
 						
 							<table class="table table-sm">
 								<thead>
 									<tr>
 										<th>Class</th>	
 										<th>Fees</th>								
-										<th>Action</th>
+										<th class="float-right">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -73,9 +95,8 @@
 												@endif
 											</td>
 											<td>
-												<a href="#"  class="btn btn-sm btn-primary" data-toggle="modal" data-target="#assignFees">
-												<i class="fas fa-link"></i>
-												</button>
+											<a  data-toggle="modal" data-target="#myModal"  class="btn float-right btn-sm btn-outline-primary" href="{{ route('admin.masterdata.assignClassFees',['academicSessionId' => $selected_academic_session_details['id'],'classId'=>$class_fees['id']]) }}"><i class="fas fa-link"></i> Assign Fees</a>
+												
 											</td>
 										</tr>
 									@endforeach

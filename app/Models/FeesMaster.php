@@ -11,7 +11,9 @@ class FeesMaster extends Model
 
     public function feesList(){
 
-		$class = DB::table('fees_masters')->select('id','fees_name', 'no_of_payments_in_a_year','payment_type')->where('is_deleted', false)->get();
+		$class = FeesMaster::select(['id','fees_name', 'no_of_payments_in_a_year','payment_type'])
+		->where('is_deleted', false)
+		->get();
 		return $class->toArray();
 	}
 }

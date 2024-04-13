@@ -87,7 +87,7 @@
                           <td> {{ $student->aadhaar_number }}</td>
                           <td> {{ $student->mobile_no_1 }}</td>
                           <td>
-                            <a  title="Fees details"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a>
+                            <!-- <a  title="Fees details"  class="btn btn-sm btn-primary" href="{{ route('admin.students.fees', ['studentId' => $student->id]) }}"><i class="fas fa-rupee-sign"></i></a> -->
                             <a  title="Academic details" class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.details', ['studentId' => $student->id]) }}"><i class="fas fa-id-card"></i> View</a>
                             <a title="Edit Student" data-toggle="modal" data-target="#myModal"  class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.add_edit', ['studentId' => $student->id]) }}"><i class="fas fa-pencil-alt"></i> Edit</a>
                           </td>

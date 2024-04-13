@@ -34,7 +34,15 @@
                           <tbody>
                           @foreach ($arr_fees_data as $fee_data)
                         
-                            <tr>
+							@if($fee_data['payment_status'] == "FULL_PAID")
+							<tr class="table-primary">
+							@elseif($fee_data['payment_status']=='PARTIALY')
+							<tr class="table-warning">
+							@else
+							<tr>
+							@endif
+
+                         
                               <td>
                                 <div class="form-check">
                                 @if($fee_data['payment_status']=='PARTIALY' || $fee_data['payment_status']=='NOT_PAID' )
@@ -99,6 +107,7 @@
 
 
 </div>
+<input type="hidden" name="student_id" value="{{$student_data['student']['id']}}">
 <div class="modal-footer justify-content-between">
 	<button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
 	@if(!empty($arr_fees_data))

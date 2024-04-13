@@ -211,8 +211,8 @@
 											<td>{{$history['roll_number']}}</td>
 											
 											<td>
-											<a data-toggle="modal" data-target="#myModal"  title="Fees details"  class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.displayFees', ['studentId' => $history['student_id']]) }}"><i class="fas fa-rupee-sign"></i> Fees</a>
-												<!-- <button class="btn btn-sm btn-outline-primary"><i class="fas fa-coins"></i> Fees</button> -->
+											<!-- <a data-toggle="modal" data-target="#myModal"  title="Fees details"  class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.displayFees', ['studentId' => $history['student_id']]) }}"><i class="fas fa-rupee-sign"></i> Fees</a> -->
+												<a title="Fees details"  class="btn btn-sm btn-outline-primary" href="{{ route('admin.students.fees', ['studentId' => $history['student_id'],'academicSessionId' => $history['academic_session_id']]) }}"><i class="fas fa-rupee-sign"></i> Fees</a>
 												<button class="btn btn-sm btn-outline-primary"><i class="fas fa-table"></i> Results</button>
 												@if($history['academic_status'] == "RUNNING")
 												<a  data-toggle="modal" data-target="#myModal"  class="btn btn-outline-primary btn-sm" href="{{ route('admin.students.editAcademicDetails',$history['id']) }}"><i class="fas fa-pencil-alt"></i> Edit</a>

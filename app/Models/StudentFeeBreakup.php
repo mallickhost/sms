@@ -91,7 +91,7 @@ class StudentFeeBreakup extends Model
 
 	 */
 
-     public function checkAnyFeesPaid(int $academicSessionId,int $studentId):array{
+     public function checkAnyFeesPaidByStudent(int $academicSessionId,int $studentId):array{
         return StudentFeeBreakup::select()
         ->where('academic_session_id',$academicSessionId)
         ->where('student_id',$studentId)

@@ -154,7 +154,7 @@
                     </a>
                     <ul class="nav nav-treeview  ">
                         <li class="nav-item">
-                            <a href="{{ route('admin.masterdata.academicFees') }}" class="nav-link  {{ (request()->is('admin/master-data/academic-fees')) ? 'active' : '' }}">
+                            <a href="{{ route('admin.masterdata.academicFees') }}" class="nav-link  {{ (request()->is('admin/master-data/academic-fees*')) ? 'active' : '' }}">
                                 <i class="fas fa-rupee-sign nav-icon"></i>
                                 <p>Academic Fees</p>
                             </a>
