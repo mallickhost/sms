@@ -34,10 +34,10 @@ class MyAccountsController extends AdminAppController
 	 * @desc login page
 	 *
 	 *
-	 * @return View
+	 * @return View|RedirectResponse
 
 	 */
-    public function login():view{
+    public function login():View|RedirectResponse{
         if (Auth::guard('admin')->check() && !empty(Auth::guard('admin')->user()->id)) {
             return redirect()->route('admin.dashboard');
         }

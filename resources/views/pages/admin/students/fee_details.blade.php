@@ -22,16 +22,14 @@
 				<div class="card card-primary card-outline">
 					<div class="card-body box-profile">
 						<div class="text-center">
-						@php
-                          $profile_img = 'assets/img/f_profile_pic.png';
-                        @endphp
+					
 
-                        @if(empty($arr_student['picture']))
-                          @if($arr_student['student']['gender'] == 'MALE')
+                        @if(empty($academics['student']['picture']))
+                          @if($academics['student']['gender'] == 'MALE')
                           @php
                             $profile_img = 'assets/img/m_profile_pic.png';
                           @endphp
-                          @elseif($arr_student['student']['gender']=="FEMALE")
+                          @elseif($academics['student']['gender']=="FEMALE")
                           @php
                             $profile_img = 'assets/img/f_profile_pic.png';
                           @endphp
@@ -39,7 +37,7 @@
 
                         @else
                           @php
-                            $profile_img = 'storage/'.$arr_student['student']['picture'];
+                            $profile_img = 'storage/'.$academics['student']['picture'];
                           @endphp
                           
                         @endif	
@@ -49,29 +47,29 @@
 							alt="User profile picture">
 						</div>
 
-						<h3 class="profile-username text-center">{{$arr_student['student']['student_name']}}</h3>
+						<h3 class="profile-username text-center">{{$academics['student']['student_name']}}</h3>
 
-						<p class="text-muted text-center">{{$arr_student['student']['student_number']}}</p>
+						<p class="text-muted text-center">{{$academics['student']['student_number']}}</p>
 
 						
 						
 						<ul class="list-group list-group-unbordered mb-0">
 						<li class="list-group-item" style="padding: 5px;">
-							<b>Class</b> <a class="float-right">{{$arr_student['class']['class_roman_name']}}</a>
+							<b>Class</b> <a class="float-right">{{$academics['class']['class_roman_name']}}</a>
 						</li>
 						<li class="list-group-item" style="padding: 5px;">
-							<b>section</b> <a class="float-right">{{$arr_student['section']['name']}}</a>
+							<b>section</b> <a class="float-right">{{$academics['section']['name']}}</a>
 						</li>
 						<li class="list-group-item" style="padding: 5px;">
-							<b>Roll No</b> <a class="float-right">{{$arr_student['roll_number']}}</a>
+							<b>Roll No</b> <a class="float-right">{{$academics['roll_number']}}</a>
 						</li>
 					
 						</ul>
 						<br>
 
-						@if(empty($arr_fees_data))
-						<a  href="{{ route('admin.students.assignFees', ['studentId' => $arr_student['student_id'],'sessionId' => $arr_student['academic_session_id']]) }}" class="btn btn-block btn-outline-primary">Assign fees</a>
-						@endif
+						
+						<a  href="{{ route('admin.students.assignFees', ['studentId' => $academics['student_id'],'sessionId' => $arr_academic_session['id']]) }}" class="btn btn-block btn-outline-primary"><i class="fas fa-rupee-sign"></i> Assign new fees</a>
+						
 					</div>
 					<!-- /.card-body -->
 				</div>
@@ -86,17 +84,17 @@
 					<div class="card-body">
 					<strong><i class="fas fa-user-friends"></i> Parent's Name</strong>
 					<p class="text-muted">
-					M: {{$arr_student['student']['mother_name']}} <br> F: {{$arr_student['student']['father_name']}}
+					M: {{$academics['student']['mother_name']}} <br> F: {{$academics['student']['father_name']}}
 					</p>
 					<hr>
 					<strong><i class="fas fa-phone-alt"></i> Contact Number</strong>
 					<p class="text-muted">
-					{{$arr_student['student']['mobile_no_1']}}<br>{{$arr_student['student']['mobile_no_2']}}
+					{{$academics['student']['mobile_no_1']}}<br>{{$academics['student']['mobile_no_2']}}
 					</p>
 					<hr>
 
 					<strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
-					<p class="text-muted">{{$arr_student['student']['address']}}</p>
+					<p class="text-muted">{{$academics['student']['address']}}</p>
 					
 				</div>
 					<!-- /.card-body -->
@@ -107,14 +105,14 @@
                 
                 <div class="card card-primary card-outline">
                   <div class="card-header">
-                    <h3 class="card-title text-primary">Fees Breakups</h3>
+                    <h3 class="card-title text-primary">Fees Breakups for session - {{$arr_academic_session['session_name']}}</h3>
                     <div class="card-tools">
-                        <a href="{{ route('admin.students.details',$arr_student['student']['id']) }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a>
+                        <a href="{{ route('admin.students.details',$academics['student']['id']) }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a>
                     </div>
                   </div>
 				 
-                    <div class="card-body p-0">
-					@if(!empty($arr_fees_data))
+                    <div class="card-body ">
+				        	@if(!empty($arr_fees_data))
                  	 <form action="{{ route('admin.students.paymentDetails') }}" method="POST">
                         <table class="table table-sm">
                           <thead>
@@ -132,7 +130,13 @@
                           <tbody>
                           @foreach ($arr_fees_data as $fee_data)
                         
+                            @if($fee_data['payment_status'] == "FULL_PAID")
+                            <tr class="table-primary">
+                            @elseif($fee_data['payment_status']=='PARTIALY')
+                            <tr class="table-warning">
+                            @else
                             <tr>
+                            @endif
                               <td>
                                 <div class="form-check">
                                 @if($fee_data['payment_status']=='PARTIALY' || $fee_data['payment_status']=='NOT_PAID' )
@@ -177,7 +181,8 @@
                             
                             <tr>
                               <td colspan="8">
-                                <input type='hidden' name="student_id" value="{{$arr_student['student']['id']}}" >
+                                <input type='hidden' name="student_id" value="{{$academics['student']['id']}}" >
+                                <input type='hidden' name="academic_session_id" value="{{$arr_academic_session['id']}}" >
                                 <button type='submit' class="btn btn-outline-primary"><i class="far fa-check-square"></i> Paid Checked</button>
                                 <!-- <button class="btn btn-sm btn-info"><i class="fas fa-download"></i> Download all paid receipt</button> -->
                               </td>
@@ -187,10 +192,10 @@
                         </table>   
 						</form>  
 						
-						
 						@else
-						<span class="badge bg-danger">No fee is assign to this student please assign fees.</span>
-						@endif
+            No fee is assign to this student please assign fees !
+							@endif
+						
                     </div>
                  
 				

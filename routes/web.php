@@ -56,7 +56,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/add-edit-student/{studentId?}', 'addEdit')->name('admin.students.add_edit');
         Route::post('/save-student', 'saveStudent')->name('admin.students.saveStudent');
         Route::put('/update-student', 'updateStudent')->name('admin.students.updateStudent');
-        Route::get('/fees/{studentId}/{academicSessionId?}', 'feeDetails')->name('admin.students.fees');
+        Route::get('/fees/{studentId}/{academicSessionId}', 'feeDetails')->name('admin.students.fees');
         Route::get('/details/{studentId}', 'details')->name('admin.students.details');
         Route::get('/edit-academic-details/{academicDetailsId}', 'editAcademicDetails')->name('admin.students.editAcademicDetails');
         Route::post('/update-academic-details', 'updateAcademicDetails')->name('admin.students.updateAcademicDetails');

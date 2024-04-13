@@ -29,7 +29,7 @@
 									
 								</div>
 								<div class="col-6">
-									<a href="{{ route('admin.students.details', ['studentId' => $current_academic['student_id']]) }}" class="btn btn-outline-danger float-right"><i class="fas fa-times"></i> Cancel Payment</a>
+									<a href="{{ route('admin.students.details', ['studentId' => $current_academic['student_id']]) }}" class="btn btn-outline-danger btn-sm float-right"><i class="fas fa-times"></i> Cancel Payment</a>
 								</div>
 							</div>
 							<div class="row invoice-info">

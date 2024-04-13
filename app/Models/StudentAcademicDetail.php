@@ -91,6 +91,88 @@ class StudentAcademicDetail extends Model
    
 
 
+
+
+
+
+
+
+
+
+/**
+	 * @desc Get student sessionwise class info
+	 *
+	 * @param int $studentId
+     * @param int $sessionId
+	 * 
+	 * @return array
+	 *
+	 */
+
+
+
+     public function getSessionWiseAcademicDetails(int $studentId,int $sessionId):array{
+        $details = StudentAcademicDetail::select()
+        ->with(['academicSession','student','class','section'])
+        ->where('students_academic_details.student_id', $studentId)
+        ->where('students_academic_details.academic_session_id', $sessionId)
+        ->first();
+
+        if(!empty($details)){
+            return $details->toArray();
+        }
+        return [];
+
+    }
+
+
+
+
+    /**
+	 * @desc Get student sessionwise class info
+	 *
+
+     * @param int $studentId
+     * @param int $classMasterId
+	 * 
+	 * @return array
+	 *
+	 */
+
+
+
+     public function getClassWiseAcademicDetails(int $studentId,int $classMasterId):array{
+        $details = StudentAcademicDetail::select()
+        ->with(['academicSession','student','class','section'])
+        ->where('students_academic_details.student_id', $studentId)
+        ->where('students_academic_details.class_master_id', $classMasterId)
+        ->whereNotIn('students_academic_details.academic_status', ['RUNNING'])
+        ->first();
+
+        if(!empty($details)){
+            return $details->toArray();
+        }
+        return [];
+
+    }
+
+
+
+
+
+
+
+
+
+ /**
+	 * @desc Get student current running class
+	 *
+	 * @param int $studentId
+	 * 
+	 * @return array
+	 *
+	 */
+
     public function x_getStudentAcademicDetails($studentId){
         $details = StudentAcademicDetail::select('*')
        // ->leftJoin('academic_sessions', 'academic_sessions.id', '=', 'student_academic_details.academic_session_id')

@@ -16,19 +16,17 @@
 				<div class="card card-primary card-outline">
 					<div class="card-body box-profile">
 						<div class="text-center">
-							@php
-								$profile_img = 'assets/img/f_profile_pic.png';
-							@endphp
+							
 
 							@if(empty($arr_student['picture']))
 								@if($arr_student['gender'] == 'MALE')
-								@php
-									$profile_img = 'assets/img/m_profile_pic.png';
-								@endphp
+									@php
+										$profile_img = 'assets/img/m_profile_pic.png';
+									@endphp
 								@elseif($arr_student['gender']=="FEMALE")
-								@php
-									$profile_img = 'assets/img/f_profile_pic.png';
-								@endphp
+									@php
+										$profile_img = 'assets/img/f_profile_pic.png';
+									@endphp
 								@endif
 
 							@else
@@ -66,7 +64,8 @@
 							</li> -->
 						</ul>
 						<br>
-						<a  data-toggle="modal" data-target="#myModal"  class="btn btn-outline-primary btn-block" href="{{ route('admin.students.promoteToNextClass',$arr_student['id']) }}"><i class="fas fa-arrow-up"></i> Promot to next class</a>
+						@else
+						<a  data-toggle="modal" data-target="#myModal"  class="btn btn-outline-primary btn-block" href="{{ route('admin.students.promoteToNextClass',$arr_student['id']) }}"><i class="fas fa-arrow-up"></i> Promote to class</a>
 						@endif
 					
 					</div>
@@ -104,73 +103,8 @@
 				<!-- /.col -->
 				<div class="col-md-9">
 
-					@if(empty($arr_student['academic_details']))
-						<div class="card card-danger card-outline">
-							<div class="card-header">
-								<h3 class="card-title text-danger">Please add Academic Details</h3>
-								<div class="card-tools">
-									<a href="{{ route('admin.students.list') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a>
-								</div>
-							</div>
 
-							<div class="card-body">
-								<form action="{{ route('admin.students.updateAcademicDetails') }}" method="POST" >
-										@csrf
-								<div class="row">
-									<div class="col-sm-3">
-										<div class="form-group">
-											<label>Academic Session</label>
-											<select class="form-control" name='academic_session_id' readonly >
-											@foreach($arr_session as $session)							
-												<option value="{{$session->id}}" >{{$session->session_name}}</option>
-											@endforeach
-											</select>
-										</div>
-									</div>
-									<div class="col-sm-2">
-										<div class="form-group">
-											<label>Class</label>
-											<select class="form-control" name='class_master_id' >
-												@foreach($arr_class as $class)							
-												<option value="{{$class->id}}" >{{$class->class_roman_name}}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
-									<div class="col-sm-2">
-										<div class="form-group">
-											<label>Section</label>
-											<select class="form-control" name='section_id' >
-											@foreach($arr_section as $section)							
-												<option value="{{$section->id}}" >{{$section->name}}</option>
-											@endforeach
-											</select>
-										</div>
-									</div>
-									<div class="col-sm-2">
-										<div class="form-group">
-											<label>Roll Number</label>
-											<input type="number" class="form-control" name='roll_number' min="1" max="100">
-										</div>
-									</div>
-
-									<div class="col-sm-3">
-										<div class="form-group">
-											<div style="padding-bottom: 33px;"></div>
-											<input type="hidden"  name='student_id' value='{{$arr_student["id"]}}' >
-											<button type="submit" class="btn btn-outline-primary  float-left"><i class="fas fa-save"></i> Save</button>
-										</div>
-									</div>
-
-								</div>
 								
-								</form>
-							</div>
-						</div>
-					@endif
-
-
-					@if(!empty($arr_history))				
 						<div class="card card-primary card-outline">
 							<div class="card-header">
 								<h3 class="card-title text-primary">Academic History</h3>
@@ -180,6 +114,7 @@
 							</div>
 
 							<div class="card-body ">
+							@if(!empty($arr_history))	
 								<table class="table table-sm">
 									<thead>
 									<tr>
@@ -221,12 +156,15 @@
 										</tr>
 										@endforeach
 									</tbody>
-								</table>     
-							
+								</table>  
+								
+							@else
+							No academic records found !
+							@endif
 							</div>
 								
 						</div>
-					@endif
+					
                 </div>
 
             </div>

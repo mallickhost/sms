@@ -213,26 +213,23 @@ class StudentsController extends AdminAppController
 	 * @param int $studentId
      * @param int $academicSessionId
 	 *
-	 * @return View
+	 * @return View|RedirectResponse
 
 	 */
 
-    public function feeDetails(int $studentId,int $academicSessionId):View {
+    public function feeDetails(int $studentId,int $academicSessionId):View|RedirectResponse {
 
         $obj_student_academic = new StudentAcademicDetail();
-		$arr_student = $obj_student_academic->getStudentCurrentAcademicDetails($studentId);
-
-
-        if(empty($arr_student)){
-			return redirect()->route('admin.students.list')->with('warning', 'Academic details not added.');
-		}
+        $academics = $obj_student_academic->getSessionWiseAcademicDetails($studentId,$academicSessionId);
 
         $obj_student_fee_breakup  = new StudentFeeBreakup();
-
         $arr_fees_data = $obj_student_fee_breakup->getStudentFeesBreakupDetails($academicSessionId,$studentId);
 
-        // $this->p($arr_student);
-       return view('pages/admin/students/fee_details',compact('arr_student','arr_fees_data'));
+        $obj_accademic_session = new AcademicSession();
+        $arr_academic_session = $obj_accademic_session->getSessionDetailsById($academicSessionId); 
+
+   
+       return view('pages/admin/students/fee_details',compact('arr_fees_data','arr_academic_session','academics'));
     }
 
 
@@ -247,11 +244,11 @@ class StudentsController extends AdminAppController
 	 *
 	 * @param int $studentId
 	 *
-	 * @return View
+	 * @return View|RedirectResponse
 
 	 */
 
-    public function details(int $studentId=null): View {
+    public function details(int $studentId=null): View|RedirectResponse {
 	
 		$obj_student = new Student();
 		$arr_student = $obj_student->getStudentDetails($studentId);
@@ -307,7 +304,19 @@ class StudentsController extends AdminAppController
 
 		$request_data = $request->all();
 
+      
 
+        $obj_student_academic = new StudentAcademicDetail();
+
+        $already_read_class = $obj_student_academic->getClassWiseAcademicDetails($request_data['student_id'],$request_data['class_master_id']);
+
+        if(!empty($already_read_class)){
+            return redirect()->route('admin.students.details',$request_data['student_id'])->with('danger','Student already read in this class');
+        }
+
+     
+
+    
 		if(!empty($request_data['id'])){
 			
 			$obj_student_academic = StudentAcademicDetail::find($request_data['id']);
@@ -332,7 +341,13 @@ class StudentsController extends AdminAppController
             }
 
 		}else{
-            $obj_student_academic = new StudentAcademicDetail();
+
+            $already_asigned_session = $obj_student_academic->getSessionWiseAcademicDetails($request_data['student_id'],$request_data['academic_session_id']);
+
+            if(!empty($already_asigned_session)){
+                return redirect()->route('admin.students.details',$request_data['student_id'])->with('danger','Student already assign to the session - '.$already_asigned_session['academic_session']['session_name']);
+            }
+           
         }
        
 
@@ -393,12 +408,12 @@ class StudentsController extends AdminAppController
        
         //only process if fees is not assigned to this student this acamenic session
 
-        $this->p($student_details);
+        // $this->p($student_details);
   
            
             // get the fees which is assigned for this academic session
             $obj_academic_fee  = new AcademicFee();
-            $arr_academic_fees =  $obj_academic_fee->getCurrentAssignedFees($student_details['academic_session_id'],$student_details['class_master_id']);
+            $arr_academic_fees =  $obj_academic_fee->getCurrentAssignedFees($academicSessionId,$student_details['class_master_id']);
        
             if(!empty($arr_academic_fees)){
 
@@ -406,7 +421,7 @@ class StudentsController extends AdminAppController
 
                     $obj_student_fee_breakup  = new StudentFeeBreakup();
 
-                    $data_exist =  $obj_student_fee_breakup->checkAlreadyAssinedFee($studentId,$academic_fees['academic_session_id'],$academic_fees['id']);
+                    $data_exist =  $obj_student_fee_breakup->checkAlreadyAssinedFee($studentId,$academicSessionId,$academic_fees['id']);
                 
                    if(empty($data_exist)){
 
@@ -418,10 +433,10 @@ class StudentsController extends AdminAppController
                         
                             $obj_student_fee_breakup->student_id = $studentId;
                             $obj_student_fee_breakup->academic_fees_id = $academic_fees['id'];
-                            $obj_student_fee_breakup->academic_session_id = $academic_fees['academic_session_id'];
+                            $obj_student_fee_breakup->academic_session_id = $academicSessionId;
                             //todo the month will be calcuated according to the setting, if needed make a new colom for setting in fee_master
                             $obj_student_fee_breakup->month_name = strtoupper(date('M', mktime(0, 0, 0, $i+1, 1)));
-                            $obj_student_fee_breakup->total_amount = $amount;
+                            $obj_student_fee_breakup->total_amount = round($amount,0);
                             $obj_student_fee_breakup->paid_amount = '0.00';
                     
                             $obj_student_fee_breakup->save();
@@ -430,9 +445,9 @@ class StudentsController extends AdminAppController
                    }
                 
                 }
-                return redirect()->route('admin.students.fees',['studentId' => $studentId ])->with('success', 'Fees assigned successfully.');
+                return redirect()->route('admin.students.fees',['studentId' => $studentId,'academicSessionId' => $academicSessionId ])->with('success', 'Fees assigned successfully.');
             }else{
-                return redirect()->route('admin.students.fees',['studentId' => $studentId ])->with('danger', 'Please assign Academic fees in Master data section.');
+                return redirect()->route('admin.students.fees',['studentId' => $studentId,'academicSessionId' => $academicSessionId ])->with('danger', 'Please assign Academic fees in Master data section.');
             }
         
         
@@ -453,12 +468,14 @@ class StudentsController extends AdminAppController
 
 		$request_data = $request->all();
 
-        $student_id = $request_data['student_id'];
-		$obj_student_academic  = new StudentAcademicDetail();
-		$current_academic = $obj_student_academic->getStudentCurrentAcademicDetails($student_id);
+   
 
+ 
+		$obj_student_academic  = new StudentAcademicDetail();
+		$current_academic = $obj_student_academic->getSessionWiseAcademicDetails($request_data['student_id'],$request_data['academic_session_id']);
+        // $this->p($current_academic);
         if(empty($request_data['payment_for'])){
-            return redirect()->route('admin.students.fees',$student_id)->with('warning', 'No fees is checked for payment');
+            return redirect()->route('admin.students.fees',$request_data['student_id'])->with('warning', 'No fees is checked for payment');
         }
         $arr_ids = array_keys($request_data['payment_for']);
         $obj_student_fee_breakup  = new StudentFeeBreakup();
@@ -618,10 +635,45 @@ class StudentsController extends AdminAppController
     }
 
 
-    public function promoteToNextClass($studentId){
 
 
-        return view('pages/admin/students/modal_promote_next_class');
+
+
+
+
+
+
+
+
+         /**
+	 * @desc open add edit modal
+	 *
+	 * @param int $studentId
+	 *
+	 * @return View
+
+	 */
+
+
+    public function promoteToNextClass(int $studentId):View{
+
+        //check if running class is there if not then promot otherwise alert
+        $obj_student = new Student();
+        $arr_student = $obj_student->getStudentDetails($studentId);
+
+
+        $obj_academic_session = new AcademicSession();
+		$arr_session = $obj_academic_session->sessionList();
+
+        $obj_class_master = new ClassMaster();
+        $arr_class = $obj_class_master->classList();
+
+        $obj_section = new Section();
+        $arr_section = $obj_section->sectionList();
+
+        // $this->p($arr_student);
+
+        return view('pages/admin/students/modal_promote_next_class',compact('arr_session','arr_class','arr_section','arr_student'));
        }
     
 }

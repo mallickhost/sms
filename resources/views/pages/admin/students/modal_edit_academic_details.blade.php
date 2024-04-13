@@ -20,7 +20,7 @@
 				<label>Academic Session</label>
 				<select class="form-control" name='academic_session_id' readonly >
 				@foreach($arr_session as $session)							
-					<option value="{{$session->id}}" {{ $session->id == $obj_student_academic->academic_session_id ? 'selected' : '' }} >{{$session->session_name}}</option>
+					<option value="{{$session['id']}}" {{ $session['id'] == $obj_student_academic->academic_session_id ? 'selected' : '' }} >{{$session['session_name']}}</option>
 				@endforeach
 				</select>
 			</div>
@@ -30,7 +30,7 @@
 				<label>Class</label>
 				<select class="form-control" name='class_master_id' >
 					@foreach($arr_class as $class)							
-					<option value="{{$class->id}}" {{ $class->id == $obj_student_academic->class_master_id ? 'selected' : '' }}>{{$class->class_roman_name}}</option>
+					<option value="{{$class['id']}}" {{ $class['id'] == $obj_student_academic->class_master_id ? 'selected' : '' }}>{{$class['class_roman_name']}}</option>
 					@endforeach
 				</select>
 			</div>
@@ -40,7 +40,7 @@
 				<label>Section</label>
 				<select class="form-control" name='section_id' >
 				@foreach($arr_section as $section)							
-					<option value="{{$section->id}}" {{ $section->id == $obj_student_academic->section_id ? 'selected' : '' }}>{{$section->name}}</option>
+					<option value="{{$section['id']}}" {{ $section['id'] == $obj_student_academic->section_id ? 'selected' : '' }}>{{$section['name']}}</option>
 				@endforeach
 				</select>
 			</div>

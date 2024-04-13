@@ -21,7 +21,7 @@ class Section extends Model
 
 	public function sectionList(){
 
-		$section= DB::table('sections')->select('id','name')->where('is_deleted', false)->get();
+		$section= Section::select(['id','name'])->where('is_deleted', false)->get();
 		return $section->toArray();
 	}
     
