@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('picture','150')->nullable();
             $table->string('email','200')->nullable();
             $table->string('password','100')->nullable();
-            $table->boolean('is_login_enabled')->default(false);
+            $table->boolean('first_time_login')->default(true);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();

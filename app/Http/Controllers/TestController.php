@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Hash;
+
 use Session;
 use App\Http\Controllers;
 use App\Models\Admin;
@@ -11,6 +11,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class TestController extends Controller
 {
@@ -29,6 +30,11 @@ class TestController extends Controller
 // print_r($data);die('xxx');
 //teacher email :ttt@mail.com	
 //password: 123
+$id = $data['id'];
+$fields = ['password'=>Hash::make($data['password'])];
+$obj_student =  Student::where('id', $id)->update($fields);;
+
+return "xxxx";
 
       $user = new admin();
       $user->name = $data['name'];

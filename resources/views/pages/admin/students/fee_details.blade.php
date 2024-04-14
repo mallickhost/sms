@@ -107,7 +107,7 @@
                   <div class="card-header">
                     <h3 class="card-title text-primary">Fees Breakups for session - {{$arr_academic_session['session_name']}}</h3>
                     <div class="card-tools">
-                        <a href="{{ route('admin.students.details',$academics['student']['id']) }}" class="btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a>
+                        <a href="{{ route('admin.students.details',$academics['student']['id']) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-chevron-left"></i> Back</a>
                     </div>
                   </div>
 				 

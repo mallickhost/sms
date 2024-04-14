@@ -23,6 +23,7 @@
 								<div class="col-6">
 									<h4>
 									<input type="hidden" name="student_id" value="{{$current_academic['student']['id']}}" >
+									<input type="hidden" name="academic_session_id" value="{{$current_academic['academic_session_id']}}" >
 									<i class="fas fa-user-graduate"></i> {{$current_academic['student']['student_name']}}
 									<!-- <small class="float-right">Date: {{ date('d-m-Y') }}</small> -->
 									</h4>

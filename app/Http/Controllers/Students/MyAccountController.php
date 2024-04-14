@@ -2,28 +2,65 @@
 
 namespace App\Http\Controllers\Students;
 
-use Session;
-use App\Http\Controllers\Students;
+use App\Models\Student;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Session;
 
 class MyAccountController extends StudentsAppController
 {
-    public function login()
-    {
+
+
+
+
+
+
+            /**
+	 * @desc Login page
+	 *
+	 *
+	 * @return View
+
+	 */
+    public function login():View {
         // die('this is student login page');
         // Session::flash('success', 'Successfully registerd now login'); StudentsAppController
         return view('pages/students/login');
     }
 
-    public function doLogin(Request $request){
 
-        // $request->validate([
-        //     'email' => 'required',
-        //     'password' => 'required',
-        // ]);
 
-        $credentials = $request->only(['email', 'password']);
+
+
+
+
+     /**
+	 * @desc login page
+	 *
+     * @param Request $request
+	 *
+	 * @return RedirectResponse
+
+	 */
+    public function doLogin(Request $request):RedirectResponse{
+
+        $request->validate([
+            'student_number' => 'required',
+            'password' => 'required',
+        ]);
+
+
+        //check if login not enabled
+        
+//         $obj_student = new Student();
+//         $did_first_login = $obj_student->checkFirstTimeLogin($request->student_number);
+// $this->p($did_first_login);
+
+
+
+        $credentials = $request->only(['student_number', 'password']);
             // echo "<pre/>";
             // print_r($credentials);die();
             // die('xx');
@@ -52,8 +89,18 @@ class MyAccountController extends StudentsAppController
         return redirect('/students');
     }
 
-    public function logout()
-    {
+
+
+
+     /**
+	 * @desc login page
+	 *
+	 *
+	 * @return RedirectResponse
+
+	 */
+
+    public function logout():RedirectResponse {
         Session::flash('success', 'Logout successfully');
         Auth::guard('student')->logout();
 
@@ -61,10 +108,37 @@ class MyAccountController extends StudentsAppController
 
     }
 
-    public function myAccount()
-    {
-        // die('this is student login page');
-        // Session::flash('success', 'Successfully registerd now login'); StudentsAppController
+
+
+
+
+
+
+
+
+
+
+
+
+     /**
+	 * @desc login page
+	 *
+	 *
+	 * @return View
+
+	 */
+
+    public function myAccount():View {
+        
+        $login_student_id =  Auth::guard('student')->user()->id;
+  
+
+        $obj_student = new Student();
+
+        $x = $obj_student->getStudentDetails($login_student_id);
+
+        $this->p($x);
+
         return view('pages/students/my_account/home');
     }
 }

@@ -14,7 +14,7 @@
                 <form action="{{ route('students.doLogin') }}" method="POST" id='frmLogin'>
                   <div class="mb-3">
                           <label  class="form-label">Student Number</label>
-                          <input type="text" name='email' class="form-control" placeholder="Student Number ">
+                          <input type="text" name='student_number' class="form-control" placeholder="Student Number ">
                   </div>
                   <div class="mb-3">
                           <label class="form-label">Password</label>
@@ -27,7 +27,7 @@
                       <a class="text-info" href=""><i class="fas fa-user-plus"></i> Register New Student</a>      
                   </div>
                   <div class="mb-12">
-                      <button type='submit' class="btn btn-flat  btn-primary">Login into student account</button>        
+                      <button type='submit' class="btn btn-flat  btn-primary">Login to student account</button>        
                   </div>
                 </form>
               </div>

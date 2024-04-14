@@ -38,8 +38,16 @@ class Student extends Authenticatable
 
 
 
+    public function currentAcademicDetails()
+    {
+        return $this->hasOne(StudentAcademicDetail::class,'student_id')->where('academic_status', 'RUNNING');
+    }
 
-    
+
+
+
+
+
 
      /**
 	 * @desc get student details with running academics
@@ -50,6 +58,72 @@ class Student extends Authenticatable
 
 	 */
     public function getStudentDetails(int $studentId):array{
+        $details = Student::select()
+        ->with(['currentAcademicDetails'=>['section','class','academicSession']])
+        ->where('students.id', $studentId)
+        ->where('students.is_deleted', false)
+        ->first();
+
+        if(!empty($details)){
+            return $details->toArray();
+        }
+        return [];
+    }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+     /**
+	 * @desc get student details with running academics
+	 *
+	 * @param string $studentNumber
+	 *
+	 * @return bool
+
+	 */
+    public function checkFirstTimeLogin(string $studentNumber):bool{
+        $details = Student::select()
+        ->where('students.student_number', $studentNumber)
+        ->where('students.first_time_login', true)
+        ->where('students.is_deleted', false)
+        ->where('students.is_active', true)
+        ->first();
+
+        if(!empty($details)){
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+     /**
+	 * @desc get student details with running academics
+	 *
+	 * @param int $studentId
+	 *
+	 * @return array
+
+	 */
+    public function x_getStudentDetails(int $studentId):array{
         $details = Student::select()
         ->with(['academicDetails'=> function($q)  {
 
@@ -65,6 +139,7 @@ class Student extends Authenticatable
         }
         return [];
     }
+
 
     
 }

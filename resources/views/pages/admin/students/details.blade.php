@@ -47,17 +47,17 @@
 
 						<p class="text-muted text-center">{{$arr_student['student_number']}}</p>
 
-						@if(!empty($arr_student['academic_details']))
+						@if(!empty($arr_student['current_academic_details']))
 						
 						<ul class="list-group list-group-unbordered mb-0">
 							<li class="list-group-item" style="padding: 5px;">
-								<b>Class</b> <a class="float-right">{{$arr_student['academic_details'][0]['class']['class_roman_name']}}</a>
+								<b>Class</b> <a class="float-right">{{$arr_student['current_academic_details']['class']['class_roman_name']}}</a>
 							</li>
 							<li class="list-group-item" style="padding: 5px;">
-								<b>section</b> <a class="float-right">{{$arr_student['academic_details'][0]['section']['name']}}</a>
+								<b>section</b> <a class="float-right">{{$arr_student['current_academic_details']['section']['name']}}</a>
 							</li>
 							<li class="list-group-item" style="padding: 5px;">
-								<b>Roll No</b> <a class="float-right">{{$arr_student['academic_details'][0]['roll_number']}}</a>
+								<b>Roll No</b> <a class="float-right">{{$arr_student['current_academic_details']['roll_number']}}</a>
 							</li>
 							<!-- <li class="list-group-item">
 								<b>Gender</b> <a class="float-right">{{$arr_student['gender']}}</a>

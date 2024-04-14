@@ -473,9 +473,9 @@ class StudentsController extends AdminAppController
  
 		$obj_student_academic  = new StudentAcademicDetail();
 		$current_academic = $obj_student_academic->getSessionWiseAcademicDetails($request_data['student_id'],$request_data['academic_session_id']);
-        // $this->p($current_academic);
+        //  $this->p($current_academic);
         if(empty($request_data['payment_for'])){
-            return redirect()->route('admin.students.fees',$request_data['student_id'])->with('warning', 'No fees is checked for payment');
+            return redirect()->route('admin.students.fees',[$request_data['student_id'],$request_data['academic_session_id']])->with('warning', 'No fees is checked for payment');
         }
         $arr_ids = array_keys($request_data['payment_for']);
         $obj_student_fee_breakup  = new StudentFeeBreakup();
@@ -512,6 +512,7 @@ class StudentsController extends AdminAppController
 
 
 		$request_data = $request->all();
+        // $this->p($request_data);
 
         if(empty($request_data['paid_amount'])){
 
@@ -558,7 +559,7 @@ class StudentsController extends AdminAppController
 
 
         }
-        return redirect()->route('admin.students.details',$request_data['student_id'])->with('success', 'Payment successfully.');
+        return redirect()->route('admin.students.fees',[$request_data['student_id'],$request_data['academic_session_id']])->with('success', 'Payment successfully.');
 
        
 	}
